@@ -1,0 +1,29 @@
+﻿<script>
+    onDocumentReady(function () {
+        //_verbDataInitialize();
+        GlobalRebuildDataFunctions.push(_verbDataInitialize);
+
+    });
+    function _verbDataInitialize(queueCallback) {
+        var parameters = {};
+        //parameters["courseinstanceid"] = GetSelectedCourseInstance();//"@(ViewBag.CourseInstanceId)";
+        GetData('@ViewBag.ApiUrl/v1/Data/Verbs', _verbDataLoaded, parameters, queueCallback)
+       }
+    function _verbDataLoaded(error, data) {
+        var $select = $('#x_verbSelect');
+        $select.find('option').remove();
+        data = JSON.parse(data);
+        for(var obj in data){
+            $select.append('<option value=' + data[obj].Id + '>' + data[obj].Name + '</option>');
+        }
+
+        $select.off("change", _verbSelectionChanged);
+        $select.on("change", _verbSelectionChanged);
+        console.log("_verbDataLoaded");
+    }
+    function _verbSelectionChanged() {
+        rebuildCharts();
+    }
+    
+    
+</script>

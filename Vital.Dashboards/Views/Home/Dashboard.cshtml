@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    ViewBag.RequireD3 = true;
+}
+
+<select id="x_courseInstanceSelect"></select>
+<select id="x_studentSelect"></select>
+<select id="x_programmeSelect"></select>
+<select id="x_verbSelect"></select>
+
+@*@Html.Partial("~/Views/Shared/_PartialPage_GlobalRebuildScript.cshtml")*@
+
+@Html.Partial("~/Views/Dashboards/ProgressStatusVertical.cshtml", new Dictionary<string, string>()/*, new Dictionary<string, string>(){ { "width", "450" }, { "height", "300"} }*/)
+@Html.Partial("~/Views/Dashboards/ProgressStatusHorizontal.cshtml", new Dictionary<string, string>()/*, new Dictionary<string, string>(){ { "width", "450" }, { "height", "300"} }*/)
+@*@Html.Partial("~/Views/Dashboards/ActivityByChapter.cshtml", new Dictionary<string, string>(){ { "width", "900" }, { "height", "300"} })
+@Html.Partial("~/Views/Dashboards/Counts.cshtml", new Dictionary<string, string>(){ })
+@Html.Partial("~/Views/Dashboards/ActivityTypesByDay.cshtml", new Dictionary<string, string>(){ })
+@Html.Partial("~/Views/Dashboards/ActivityByTimeOfDay.cshtml", new Dictionary<string, string>(){ })
+@Html.Partial("~/Views/Dashboards/ActivityByTypeByDay.cshtml", new Dictionary<string, string>(){ })*@
+
+
+@Html.Partial("~/Views/Shared/_PartialPage_FilterCourseInstance.cshtml")
+@Html.Partial("~/Views/Shared/_PartialPage_FilterStudent.cshtml")
+@Html.Partial("~/Views/Shared/_PartialPage_FilterProgramme.cshtml")
+@Html.Partial("~/Views/Shared/_PartialPage_FilterVerb.cshtml")

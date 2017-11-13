@@ -1,0 +1,601 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>C:\build\Vital.Dashboards</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="ActivityByDayFakeDataSource.html">
+      <publishTime>03/20/2017 16:27:55</publishTime>
+    </File>
+    <File Include="ActivityByTimeOfDayFakeDataSource.html">
+      <publishTime>03/07/2017 11:53:59</publishTime>
+    </File>
+    <File Include="bin/Content/font-awesome.css">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="bin/Content/font-awesome.min.css">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="bin/Content/Images/achtergrondbeeld_web_overlaycolor.jpg">
+      <publishTime>06/21/2017 09:08:01</publishTime>
+    </File>
+    <File Include="bin/Content/Images/icon-contact.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/icon-contact.svg">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/icon-guidelines.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/icon-guidelines.svg">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/icon-more.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/icon-more.svg">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/icon-projectsite.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/icon-projectsite.svg">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/loading.gif">
+      <publishTime>05/31/2017 13:54:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-erasmus.png">
+      <publishTime>10/31/2013 12:31:14</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-ht2labs.png">
+      <publishTime>06/21/2017 14:48:20</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-uclan.gif">
+      <publishTime>05/30/2017 10:37:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-uhasselt-compact.png">
+      <publishTime>05/30/2017 10:38:22</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-uhasselt.png">
+      <publishTime>05/30/2017 10:38:03</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-uva-compact-very.png">
+      <publishTime>06/20/2017 10:19:01</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-uva-compact.jpg">
+      <publishTime>05/30/2017 10:41:29</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-uva-compact.png">
+      <publishTime>06/19/2017 11:39:31</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-uva.jpg">
+      <publishTime>05/30/2017 10:34:32</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-vital-arrow.png">
+      <publishTime>05/30/2017 10:29:48</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-vital-dashboards.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-vital-dashboards.svg">
+      <publishTime>06/22/2017 16:08:56</publishTime>
+    </File>
+    <File Include="bin/Content/Images/logo-vital.png">
+      <publishTime>05/30/2017 10:18:28</publishTime>
+    </File>
+    <File Include="bin/Content/Pdf/Guidelines-UCLan-Instructor.pdf">
+      <publishTime>09/15/2017 11:59:18</publishTime>
+    </File>
+    <File Include="bin/Content/Pdf/Guidelines-UCLan.pdf">
+      <publishTime>06/20/2017 10:30:54</publishTime>
+    </File>
+    <File Include="bin/Content/Pdf/Guidelines-UHasselt-Instructor.pdf">
+      <publishTime>09/15/2017 11:59:31</publishTime>
+    </File>
+    <File Include="bin/Content/Pdf/Guidelines-UHasselt.pdf">
+      <publishTime>06/20/2017 10:30:29</publishTime>
+    </File>
+    <File Include="bin/Content/Pdf/Guidelines-UvA-Instructor.pdf">
+      <publishTime>09/15/2017 12:46:04</publishTime>
+    </File>
+    <File Include="bin/Content/Pdf/Guidelines-UvA.pdf">
+      <publishTime>06/20/2017 10:31:08</publishTime>
+    </File>
+    <File Include="bin/Content/Pdf/VITAL_Actionplan_Legal_ethical_aspects_collection_learning_data25042016_V2.pdf">
+      <publishTime>06/20/2017 10:30:39</publishTime>
+    </File>
+    <File Include="bin/Content/plugins/pagination/pagination.css">
+      <publishTime>08/25/2017 15:12:18</publishTime>
+    </File>
+    <File Include="bin/Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-noir.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-punk.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css">
+      <publishTime>06/20/2017 11:09:21</publishTime>
+    </File>
+    <File Include="bin/Content/Site.css">
+      <publishTime>09/13/2017 09:29:45</publishTime>
+    </File>
+    <File Include="bin/Content/tooltipster.bundle.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Content/tooltipster.bundle.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Content/tooltipster.main.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Content/tooltipster.main.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/fonts/fontawesome-webfont.eot">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="bin/fonts/fontawesome-webfont.svg">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="bin/fonts/fontawesome-webfont.ttf">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="bin/fonts/fontawesome-webfont.woff">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="bin/fonts/fontawesome-webfont.woff2">
+      <publishTime>09/11/2017 14:39:09</publishTime>
+    </File>
+    <File Include="bin/fonts/FontAwesome.otf">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="bin/fonts/glyphicons-halflings-regular.eot">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="bin/fonts/glyphicons-halflings-regular.svg">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="bin/fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="bin/fonts/glyphicons-halflings-regular.woff">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>03/06/2017 16:10:41</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>04/28/2016 11:21:40</publishTime>
+    </File>
+    <File Include="bin/Scripts/js.cookie.js">
+      <publishTime>05/30/2017 11:11:24</publishTime>
+    </File>
+    <File Include="bin/Scripts/pagination.js">
+      <publishTime>08/31/2017 17:28:56</publishTime>
+    </File>
+    <File Include="bin/Scripts/progressbar.min.js">
+      <publishTime>05/31/2017 14:30:02</publishTime>
+    </File>
+    <File Include="bin/Scripts/tooltipster.bundle.js">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Scripts/tooltipster.bundle.min.js">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Scripts/tooltipster.main.js">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/Scripts/tooltipster.main.min.js">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>03/06/2017 16:10:41</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>03/06/2017 16:10:42</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>03/06/2017 16:10:41</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Deployment.dll">
+      <publishTime>03/06/2017 16:10:41</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.dll">
+      <publishTime>03/06/2017 16:10:41</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Razor.dll">
+      <publishTime>03/06/2017 16:10:41</publishTime>
+    </File>
+    <File Include="bin/Vital.Dashboards.dll">
+      <publishTime>09/15/2017 12:48:47</publishTime>
+    </File>
+    <File Include="Content/bootstrap.css">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Content/bootstrap.min.css">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Content/font-awesome.css">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="Content/font-awesome.min.css">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="Content/Images/achtergrondbeeld_web_overlaycolor.jpg">
+      <publishTime>06/21/2017 09:08:01</publishTime>
+    </File>
+    <File Include="Content/Images/icon-contact.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="Content/Images/icon-contact.svg">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="Content/Images/icon-guidelines.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="Content/Images/icon-guidelines.svg">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="Content/Images/icon-more.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="Content/Images/icon-more.svg">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="Content/Images/icon-projectsite.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="Content/Images/icon-projectsite.svg">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="Content/Images/loading.gif">
+      <publishTime>05/31/2017 13:54:02</publishTime>
+    </File>
+    <File Include="Content/Images/logo-erasmus.png">
+      <publishTime>10/31/2013 12:31:14</publishTime>
+    </File>
+    <File Include="Content/Images/logo-ht2labs.png">
+      <publishTime>06/21/2017 14:48:20</publishTime>
+    </File>
+    <File Include="Content/Images/logo-uclan.gif">
+      <publishTime>05/30/2017 10:37:02</publishTime>
+    </File>
+    <File Include="Content/Images/logo-uhasselt-compact.png">
+      <publishTime>05/30/2017 10:38:22</publishTime>
+    </File>
+    <File Include="Content/Images/logo-uhasselt.png">
+      <publishTime>05/30/2017 10:38:03</publishTime>
+    </File>
+    <File Include="Content/Images/logo-uva-compact-very.png">
+      <publishTime>06/20/2017 10:19:01</publishTime>
+    </File>
+    <File Include="Content/Images/logo-uva-compact.jpg">
+      <publishTime>05/30/2017 10:41:29</publishTime>
+    </File>
+    <File Include="Content/Images/logo-uva-compact.png">
+      <publishTime>06/19/2017 11:39:31</publishTime>
+    </File>
+    <File Include="Content/Images/logo-uva.jpg">
+      <publishTime>05/30/2017 10:34:32</publishTime>
+    </File>
+    <File Include="Content/Images/logo-vital-arrow.png">
+      <publishTime>05/30/2017 10:29:48</publishTime>
+    </File>
+    <File Include="Content/Images/logo-vital-dashboards.png">
+      <publishTime>06/21/2017 09:08:02</publishTime>
+    </File>
+    <File Include="Content/Images/logo-vital-dashboards.svg">
+      <publishTime>06/22/2017 16:08:56</publishTime>
+    </File>
+    <File Include="Content/Images/logo-vital.png">
+      <publishTime>05/30/2017 10:18:28</publishTime>
+    </File>
+    <File Include="Content/Pdf/Guidelines-UCLan-Instructor.pdf">
+      <publishTime>09/15/2017 11:59:18</publishTime>
+    </File>
+    <File Include="Content/Pdf/Guidelines-UCLan.pdf">
+      <publishTime>06/20/2017 10:30:54</publishTime>
+    </File>
+    <File Include="Content/Pdf/Guidelines-UHasselt-Instructor.pdf">
+      <publishTime>09/15/2017 11:59:31</publishTime>
+    </File>
+    <File Include="Content/Pdf/Guidelines-UHasselt.pdf">
+      <publishTime>06/20/2017 10:30:29</publishTime>
+    </File>
+    <File Include="Content/Pdf/Guidelines-UvA-Instructor.pdf">
+      <publishTime>09/15/2017 12:46:04</publishTime>
+    </File>
+    <File Include="Content/Pdf/Guidelines-UvA.pdf">
+      <publishTime>06/20/2017 10:31:08</publishTime>
+    </File>
+    <File Include="Content/Pdf/VITAL_Actionplan_Legal_ethical_aspects_collection_learning_data25042016_V2.pdf">
+      <publishTime>06/20/2017 10:30:39</publishTime>
+    </File>
+    <File Include="Content/plugins/pagination/pagination.css">
+      <publishTime>08/25/2017 15:12:18</publishTime>
+    </File>
+    <File Include="Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-borderless.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-noir.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-punk.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Content/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-shadow.min.css">
+      <publishTime>06/20/2017 11:09:21</publishTime>
+    </File>
+    <File Include="Content/Site.css">
+      <publishTime>09/13/2017 09:29:45</publishTime>
+    </File>
+    <File Include="Content/tooltipster.bundle.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Content/tooltipster.bundle.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Content/tooltipster.main.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Content/tooltipster.main.min.css">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="FakeDataSource/ActivityByDay.html">
+      <publishTime>03/22/2017 14:49:27</publishTime>
+    </File>
+    <File Include="FakeDataSource/ActivityByTimeOfDay.html">
+      <publishTime>03/07/2017 11:53:59</publishTime>
+    </File>
+    <File Include="FakeDataSource/ExerciseActivityByChapter.html">
+      <publishTime>04/10/2017 14:27:42</publishTime>
+    </File>
+    <File Include="FakeDataSource/ExerciseActivityByDay.html">
+      <publishTime>03/22/2017 14:54:46</publishTime>
+    </File>
+    <File Include="FakeDataSource/SessionActivityByDay.html">
+      <publishTime>03/22/2017 16:15:40</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.eot">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.svg">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.ttf">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.woff">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="fonts/fontawesome-webfont.woff2">
+      <publishTime>09/11/2017 14:39:09</publishTime>
+    </File>
+    <File Include="fonts/FontAwesome.otf">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.eot">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.svg">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.woff">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>03/06/2017 16:10:39</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>09/11/2017 14:39:10</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.js">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.min.js">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.js">
+      <publishTime>03/06/2017 16:11:58</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.min.js">
+      <publishTime>03/06/2017 16:11:58</publishTime>
+    </File>
+    <File Include="Scripts/jquery-1.10.2.min.map">
+      <publishTime>03/06/2017 16:11:58</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.js">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.min.js">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.unobtrusive.js">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Scripts/jquery.validate.unobtrusive.min.js">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Scripts/js.cookie.js">
+      <publishTime>05/30/2017 11:11:24</publishTime>
+    </File>
+    <File Include="Scripts/modernizr-2.6.2.js">
+      <publishTime>03/06/2017 16:12:02</publishTime>
+    </File>
+    <File Include="Scripts/pagination.js">
+      <publishTime>08/31/2017 17:28:56</publishTime>
+    </File>
+    <File Include="Scripts/progressbar.min.js">
+      <publishTime>05/31/2017 14:30:02</publishTime>
+    </File>
+    <File Include="Scripts/tooltipster.bundle.js">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Scripts/tooltipster.bundle.min.js">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Scripts/tooltipster.main.js">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Scripts/tooltipster.main.min.js">
+      <publishTime>04/28/2017 15:36:37</publishTime>
+    </File>
+    <File Include="Scripts/vital.dashboards.utils.js">
+      <publishTime>09/13/2017 16:32:09</publishTime>
+    </File>
+    <File Include="Views/Dashboards/ActivityByChapter.cshtml">
+      <publishTime>10/18/2017 11:13:53</publishTime>
+    </File>
+    <File Include="Views/Dashboards/ActivityByDay.cshtml">
+      <publishTime>06/08/2017 16:09:31</publishTime>
+    </File>
+    <File Include="Views/Dashboards/ActivityByTimeOfDay.cshtml">
+      <publishTime>06/22/2017 16:50:37</publishTime>
+    </File>
+    <File Include="Views/Dashboards/ActivityByTypeByDay.cshtml">
+      <publishTime>07/14/2017 16:31:55</publishTime>
+    </File>
+    <File Include="Views/Dashboards/ActivityTypesByDay.cshtml">
+      <publishTime>07/26/2017 09:32:14</publishTime>
+    </File>
+    <File Include="Views/Dashboards/Copy %282%29 of ExerciseActivityByDay.cshtml">
+      <publishTime>05/19/2017 11:31:20</publishTime>
+    </File>
+    <File Include="Views/Dashboards/Copy of ActivityByTimeOfDay.cshtml">
+      <publishTime>05/19/2017 11:31:22</publishTime>
+    </File>
+    <File Include="Views/Dashboards/Counts.cshtml">
+      <publishTime>06/21/2017 15:25:03</publishTime>
+    </File>
+    <File Include="Views/Dashboards/ExerciseActivityByDay.cshtml">
+      <publishTime>05/12/2017 09:30:02</publishTime>
+    </File>
+    <File Include="Views/Dashboards/GoogleTest.cshtml">
+      <publishTime>05/10/2017 15:48:52</publishTime>
+    </File>
+    <File Include="Views/Dashboards/ProgressStatus.cshtml">
+      <publishTime>06/02/2017 14:03:16</publishTime>
+    </File>
+    <File Include="Views/Dashboards/ProgressStatusHorizontal.cshtml">
+      <publishTime>10/18/2017 11:29:50</publishTime>
+    </File>
+    <File Include="Views/Dashboards/ProgressStatusVertical.cshtml">
+      <publishTime>06/23/2017 13:22:27</publishTime>
+    </File>
+    <File Include="Views/Dashboards/Ranking.cshtml">
+      <publishTime>09/12/2017 10:16:56</publishTime>
+    </File>
+    <File Include="Views/Dashboards/SessionActivityByDay.cshtml">
+      <publishTime>05/31/2017 16:29:47</publishTime>
+    </File>
+    <File Include="Views/Dashboards/TimeSpentByChapter.cshtml">
+      <publishTime>09/12/2017 13:46:08</publishTime>
+    </File>
+    <File Include="Views/Dashboards/TopTimeSpentByChapter.cshtml">
+      <publishTime>09/12/2017 13:59:43</publishTime>
+    </File>
+    <File Include="Views/Home/Copy of Login.cshtml">
+      <publishTime>06/19/2017 11:26:13</publishTime>
+    </File>
+    <File Include="Views/Home/Dashboard.cshtml">
+      <publishTime>06/06/2017 12:01:48</publishTime>
+    </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>06/21/2017 15:19:01</publishTime>
+    </File>
+    <File Include="Views/Home/Instructor.cshtml">
+      <publishTime>10/25/2017 10:58:53</publishTime>
+    </File>
+    <File Include="Views/Home/InstructorUCLan.cshtml">
+      <publishTime>09/15/2017 12:51:34</publishTime>
+    </File>
+    <File Include="Views/Home/InstructorUvA.cshtml">
+      <publishTime>10/25/2017 10:58:57</publishTime>
+    </File>
+    <File Include="Views/Home/Login.cshtml">
+      <publishTime>07/20/2017 10:48:36</publishTime>
+    </File>
+    <File Include="Views/Home/More.cshtml">
+      <publishTime>08/31/2017 20:32:19</publishTime>
+    </File>
+    <File Include="Views/Home/Student.cshtml">
+      <publishTime>09/14/2017 16:46:56</publishTime>
+    </File>
+    <File Include="Views/Home/StudentUCLan.cshtml">
+      <publishTime>09/13/2017 16:42:58</publishTime>
+    </File>
+    <File Include="Views/Home/StudentUCLanOld.cshtml">
+      <publishTime>06/20/2017 12:23:47</publishTime>
+    </File>
+    <File Include="Views/Home/StudentUvA.cshtml">
+      <publishTime>09/15/2017 09:12:35</publishTime>
+    </File>
+    <File Include="Views/Home/StudentUvAOld.cshtml">
+      <publishTime>06/20/2017 12:19:39</publishTime>
+    </File>
+    <File Include="Views/Shared/_Layout.cshtml">
+      <publishTime>09/15/2017 10:21:52</publishTime>
+    </File>
+    <File Include="Views/Shared/_LoginLayout.cshtml">
+      <publishTime>09/08/2017 09:53:29</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_FilterClass.cshtml">
+      <publishTime>05/30/2017 15:54:02</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_FilterCourseInstance.cshtml">
+      <publishTime>05/31/2017 16:24:14</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_FilterProgramme.cshtml">
+      <publishTime>01/06/2017 12:06:03</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_FilterStudent.cshtml">
+      <publishTime>09/12/2017 16:19:04</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_FilterVerb.cshtml">
+      <publishTime>05/30/2017 16:09:28</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_Footer_Partners.cshtml">
+      <publishTime>06/22/2017 11:39:44</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_GlobalRebuildScript.cshtml">
+      <publishTime>05/31/2017 16:25:50</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_Tooltips_UCLan.cshtml">
+      <publishTime>09/15/2017 12:43:46</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_Tooltips_UH.cshtml">
+      <publishTime>09/14/2017 17:02:42</publishTime>
+    </File>
+    <File Include="Views/Shared/_PartialPage_Tooltips_UvA.cshtml">
+      <publishTime>09/15/2017 12:48:30</publishTime>
+    </File>
+    <File Include="Views/web.config">
+      <publishTime>01/06/2017 14:29:20</publishTime>
+    </File>
+    <File Include="Views/_ViewStart.cshtml">
+      <publishTime>03/06/2017 16:12:03</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>09/12/2017 12:28:06</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,30 @@
+﻿<script>
+    onDocumentReady(function () {
+        //_programmeDataInitialize();
+        GlobalRebuildDataFunctions.push(_programmeDataInitialize);
+    });
+
+    function _programmeDataInitialize(queueCallback) {
+        var parameters = {};
+        parameters["courseinstanceid"] = GetSelectedCourseInstance();//"@(ViewBag.CourseInstanceId)";
+        parameters["logagentid"] = Cookies.get('user-id');
+        GetData('@ViewBag.ApiUrl/v1/Data/Programmes', _programmeDataLoaded, parameters, queueCallback)
+    }
+    function _programmeDataLoaded(error, data) {
+        var $select = $('#x_programmeSelect');
+        $select.find('option').remove();
+        data = JSON.parse(data);
+        for(var obj in data){
+            $select.append('<option value=' + data[obj].Id + '>' + data[obj].Name + '</option>');
+        }
+
+        $select.off("change", _programmeSelectionChanged);
+        $select.on("change", _programmeSelectionChanged);
+        console.log("_programmeDataLoaded");
+    }
+    function _programmeSelectionChanged() {
+        rebuildCharts();
+    }
+    
+    
+</script>

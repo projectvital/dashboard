@@ -1,0 +1,277 @@
+﻿@{
+    ViewBag.Title = "Student";
+    ViewBag.RequireD3 = true;
+}
+
+<style>
+    @*.count-widget {
+        width:  130px;
+        height: 130px;
+        /*background-color: red;*/
+        text-align: center;
+        font-weight: bold;
+        border-radius: 65px;
+        padding: 10px;
+        border-bottom-right-radius: 40px;
+        border-bottom-left-radius: 40px;
+        /*display: inline-table;
+        margin-right: 15px;*/
+    }
+    .count-widget-counter {
+        color: white;
+        font-size: 25px;
+        height: 30px;
+    }
+    .count-widget-name {
+        color: black;
+        height: 80px;
+        vertical-align: middle;
+        display: table-cell;
+        text-align: center;
+        width: 110px;
+    }*@
+    #_ProgressInWeek_container {
+        margin-bottom: 15px;
+        width: 160px;
+        height: 70px;
+    }
+    #_ProgressInWeek_label {
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
+
+<div class="mainbox">
+    <div class="region-top">
+        <div class="container">
+@*            <div class="row">
+                <div class="col-md-3" style="padding: 0;">
+                </div>
+                <div class="col-md-6" style="color: lightgray;">
+                </div>
+                <div class="col-md-3" style="padding: 0;">
+                    <img src="/Content/Images/logo-vital.png" alt="Vital" />
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-md-12" style="padding: 0;">
+                    <select id="x_courseInstanceSelect"></select>
+                    <select id="x_studentSelect"></select>
+                    <select id="x_programmeSelect"></select>
+                    @*<select id="x_verbSelect"></select>*@
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 0; padding-top: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">
+                    <div class="info counter infotooltip" data-tooltip-content="#tooltip_counter_generic">i</div>
+                    <div class="count-widget" id="_CompletedExercises_container" style="background-color: #1f77b4;"></div>
+                </div>
+                <div class="col-md-2">
+                    <div class="info counter infotooltip" data-tooltip-content="#tooltip_counter_generic">i</div>
+                    <div class="count-widget" id="_CompletedExercisesScore_container" style="background-color: #ff7f0e;"></div>
+                </div>
+                <div class="col-md-2">
+                    <div class="info counter infotooltip" data-tooltip-content="#tooltip_counter_generic">i</div>
+                    <div class="count-widget" id="_ProgressInWeek_container" style="/*background-color: #9467bd;*/"></div>
+                    <div id="_ProgressInWeek_label" style="/*background-color: #9467bd;*/"></div>
+                </div>
+                <div class="col-md-2">
+                    <div class="info counter infotooltip" data-tooltip-content="#tooltip_counter_generic">i</div>
+                    <div class="count-widget" id="_CompletedAssessments_container" style="background-color: #d62728;"></div>
+                </div>
+                <div class="col-md-2">
+                    <div class="info counter infotooltip" data-tooltip-content="#tooltip_counter_generic">i</div>
+                    <div class="count-widget" id="_CompletedAssessmentsScore_container" style="background-color: #2ca02c;"></div>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div class="row" style="text-align: center;">
+                <div class="col-md-6" style="padding: 0; /*border-right: 2px solid black; */height: 500px;">
+                    <div class="info infotooltip" data-tooltip-content="#tooltip_graph_activity_timing">i</div>
+                    <h2>Activity timing</h2>
+                    @Html.Partial("~/Views/Dashboards/ActivityByTypeByDay.cshtml", new Dictionary<string, string>(){ { "width", "500" }, { "height", "350"} })
+                    @*@Html.Partial("~/Views/Dashboards/ActivityByChapter.cshtml", new Dictionary<string, string>(){ { "width", "500" }, { "height", "350"} })*@
+                </div>
+                <div class="col-md-6" style="">
+                    <div class="info infotooltip" data-tooltip-content="#tooltip_graph_course_schedule">i</div>
+                    <h2>Course schedule & progress</h2>
+                    @*@Html.Partial("~/Views/Dashboards/ActivityByTimeOfDay.cshtml", new Dictionary<string, string>(){ { "width", "500" }, { "height", "350"} })*@
+                    @Html.Partial("~/Views/Dashboards/ProgressStatusHorizontal.cshtml", new Dictionary<string, string>(){ { "width", "500" }, { "height", "350"} })
+                </div>
+            </div>
+			<div class="row" style="text-align: center;">
+                <div class="col-md-12" style="">
+                    <div class="block-container">
+                        <div class="info infotooltip" data-tooltip-content="#tooltip_graph_activity_by_chapter">i</div>
+                        <h2>Activity by chapter</h2>
+                        @Html.Partial("~/Views/Dashboards/ActivityByChapter.cshtml", new Dictionary<string, string>(){ { "width", "1000" }, { "height", "350"} })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tooltip_templates" style="display: none;">
+    <span id="tooltip_counter_generic">
+        De <span class="highlight">tellers bovenaan</span> tonen je voortgang op een aantal leeractiviteiten in de leeromgeving waarop succesvolle studenten hoger scoorden dan minder succesvolle studenten volgens een clusteranalyse op leerdata van eerdere cursussen.
+        <br />De data worden tijdens het vak live gegenereerd en ververst als je online bent in de cursus. Je kan desgewenst je resultaten vergelijken met gemiddelden. 
+        <br />"completed exercises": oefeningen die je gestart hebt en afgemaakt hebt, en ook vervolledigde, waarna je de juiste oplossingen kon bekijken. 
+        <br />Neem je tijd om de juiste oplossingen na te kijken/in te studeren en controleer of je de inhouden voldoende beheerst. Herstart de activiteit later.
+        <br />"% of activities completed": alle activiteit op oefeningen en theoriepagina’s. 
+        <br />Op een puur kwantitatief niveau zeggen deze metrieken niets over studiesucces. Minstens zo belangrijk is het “brains on” oefenen, herhalen en gericht te studeren.
+    </span>
+    <span id="tooltip_graph_activity_timing">
+        <span class="highlight">Activity timing</span> toont je activiteit (voornaamste types activiteiten in de online leeromgeving) op een tijdlijn. 
+        <br />Dit geeft aan of je regelmatig online werkt en wat voor soort activiteiten je het meest uitvoert. 
+        <br />Pieken vóór een verticale stippellijn vertellen dat je meer actief bent geweest voor een  deadline. 
+        <br />Regelmatig werken verhoogt het studiesucces.
+    </span>
+    <div id="tooltip_graph_course_schedule">
+        <span class="highlight">Course schedule & progress</span> visualiseert je wekelijkse voortgang ten opzichte van de studieplanning. 
+        <ul>
+            <li>Hoe meer groen, hoe meer je gedaan hebt.            </li>
+            <li>Oranje toont het  resterende werk aan.                        </li>
+            <li>De blauwe lijntjes geven het groepsgemiddelde per week aan. </li>
+            <li>Rood hoeveel je medestudenten in totaal gedaan hebben.   </li>
+        </ul>
+        Besef dat alleen de mate van activiteit op zich niets vertelt over de kwaliteit van het leren. 
+        <br />Het is belangrijk dat je een leergierige houding aanneemt, o.a. door oefeningen te herhalen totdat je het echt snapt, uitlegvideo’s te bekijken, voorbeelden aandachtig te bekijken, oplossingen en theorie te bestuderen, etc. 
+    </div>
+    <span id="tooltip_graph_activity_by_chapter">
+        <span class="highlight">Activity by chapter</span> toont in een bellendiagram hoe jouw aandacht voor de cursusinhouden verspreid is over de verschillende hoofdstukken. 
+        <br />Grotere bellen betekenen dat meer activiteit gegenereerd werd voor specifieke hoofdstukken, die elk getoond worden met een andere kleur. 
+        <br />Bij een ideale studievoortgang volgen de bellen in het bellendiagram de studieplanning. 
+        <br />Na de lessenperiode en tijdens de examenvoorbereiding vertonen de meeste studenten een mix van activiteiten omdat ze diverse activiteiten in verschillende hoofdstukken herhalen.
+    </span>
+</div>
+
+<script src="~/Scripts/progressbar.min.js"></script>
+<script>
+    GlobalRebuildFunctions.push(buildCounts_@(ViewBag.Key));
+   
+    function buildCounts_@(ViewBag.Key)() {
+        var parameters = {};
+        parameters["courseinstanceid"] = GetSelectedCourseInstance();//"@(ViewBag.CourseInstanceId)";
+        AddDataFilterFromCombo("#x_studentSelect", "logagentid", parameters);
+        AddDataFilterFromCombo("#x_programmeSelect", "programmeid", parameters);
+
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedExercises/Average', function (error, data) { 
+            FillVisualControlWithCountModel("_CompletedExercises_container", error, data, function (container, data) { container.innerHTML = "<div><div class=\"count-widget-counter\">" + data.Count + "</div><div class=\"count-widget-name\">" + data.Name + "</div></div>"; });
+        }, parameters);
+
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedExercises/Average/50', function (error, data) {
+            FillVisualControlWithCountModel("_CompletedExercisesScore_container", error, data, function (container, data) { container.innerHTML = "<div class=\"\"><div class=\"count-widget-counter\">" + data.Count + "</div><div class=\"count-widget-name\">" + data.Name + "</div></div>"; });
+        }, parameters);
+
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedAssessments/Average', function (error, data) { 
+            FillVisualControlWithCountModel("_CompletedAssessments_container", error, data, function (container, data) { container.innerHTML = "<div><div class=\"count-widget-counter\">" + data.Count + "</div><div class=\"count-widget-name\">" + data.Name + "</div></div>"; });
+        }, parameters);
+
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedAssessments/Average/75', function (error, data) {
+            FillVisualControlWithCountModel("_CompletedAssessmentsScore_container", error, data, function (container, data) { container.innerHTML = "<div class=\"\"><div class=\"count-widget-counter\">" + data.Count + "</div><div class=\"count-widget-name\">" + data.Name + "</div></div>"; });
+        }, parameters);
+   
+        drawProgressBarForWeek();
+    }
+    function drawProgressBarForWeek()
+    {
+        var jsonData = {};
+        jsonData["timeblock"] = "current";
+        jsonData["courseinstanceid"] = GetSelectedCourseInstance();
+        AddDataFilterFromCombo("#x_studentSelect", "logagentid", jsonData);
+        AddDataFilterFromCombo("#x_programmeSelect", "programmeid", jsonData);
+
+        GetCsvChartData("@ViewBag.ApiUrl/v1/ChartData/ProgressStatus", drawProgressBarForWeekType, drawProgressBarForWeekCallback, jsonData/*"a=2&b=3"*/);
+    }
+    function drawProgressBarForWeekType(d, i, columns) {
+        for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
+        return d;
+    }
+    function drawProgressBarForWeekCallback(error, data)
+    {
+        _ProgressInWeek_container.innerHTML = "";
+        _ProgressInWeek_label.innerHTML = "";
+
+        //Returned results in format: timeblock,total,groupcount,count,average
+        //For 1 student: take actual value (=count).
+        //For all students: take average value.
+        var value = 0;
+        var label = "";
+        if(data)
+        {
+            var studentFilter = GetDataFilterFromCombo("#x_studentSelect");
+            if(!studentFilter) studentFilter = -1;
+
+            if(data.length == 1)
+            {
+                if(studentFilter == -1)
+                    value = +data[0].average / +data[0].total;
+                else
+                    value = +data[0].count / +data[0].total;
+
+                _ProgressInWeek_label.innerHTML = 'Activities of week ' + +data[0].timeblock + ' completed';
+            }
+            else if (data.length > 1)
+            {
+                var grand_total = d3.sum(data, function (d) { return +d.total; });
+
+                if(studentFilter == -1)
+                {
+                    value = d3.sum(data, function (d) { return +d.average; }) / grand_total;
+                    _ProgressInWeek_label.innerHTML = 'Activities completed on average (entire course)';
+                }
+                else
+                {
+                    value = d3.sum(data, function (d) { return +d.count; }) / grand_total;
+                    _ProgressInWeek_label.innerHTML = 'Activities completed (entire course)';
+                }
+                
+                
+            }
+        }
+
+        
+
+        var bar = new ProgressBar.SemiCircle(_ProgressInWeek_container, {
+            strokeWidth: 20,
+            color: '#9467bd',
+            trailColor: '#eee',
+            trailWidth: 15,
+            easing: 'easeInOut',
+            duration: 1400,
+            svgStyle: null,
+            text: {
+                value: '',
+                alignToBottom: false
+            },
+            from: {color: '#d62728'},
+            to: {color: '#61cc04'},
+            // Set default step function for all animate calls
+            step: (state, bar) => {
+                bar.path.setAttribute('stroke', state.color);
+                var value = Math.round(bar.value() * 100);
+                if (value === 0) {
+                    bar.setText('');
+                } else {
+                    bar.setText(value + '%');
+                }
+
+                bar.text.style.color = state.color;
+            }
+        });
+        bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+        bar.text.style.fontSize = '2rem';
+        
+
+        bar.animate(value);  //
+    
+    }
+</script>
+
+@Html.Partial("~/Views/Shared/_PartialPage_FilterCourseInstance.cshtml")
+@Html.Partial("~/Views/Shared/_PartialPage_FilterStudent.cshtml")
+@Html.Partial("~/Views/Shared/_PartialPage_FilterProgramme.cshtml")
+@Html.Partial("~/Views/Shared/_PartialPage_FilterVerb.cshtml")

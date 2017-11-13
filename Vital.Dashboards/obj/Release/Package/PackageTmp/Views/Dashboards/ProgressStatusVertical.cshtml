@@ -1,0 +1,235 @@
+﻿
+@{
+    ViewBag.Title = "ProgressStatus";
+    ViewBag.RequireD3 = true;
+    ViewBag.InstanceId = Guid.NewGuid().ToString().Replace("-", "");
+    ViewBag.Key = ViewBag.Title + "_" + ViewBag.InstanceId;
+    
+    ViewBag.Width = (this.Model != null && this.Model.ContainsKey("width")) ? this.Model["width"] : 960;
+    ViewBag.Height = (this.Model != null && this.Model.ContainsKey("height")) ? this.Model["height"] : 500;
+    //ViewBag.IsStandalone = (this.ViewContext.Controller as Vital.Dashboards.Controllers.Base.BaseController).IsControlStandalone();
+    ViewBag.IsStandalone = (this.Model == null);// && this.Model.ContainsKey("iswidget") && this.Model["iswidget"] == "true") ? false : true;
+}
+
+
+@if(ViewBag.IsStandalone)
+{
+    Html.RenderPartial("~/Views/Shared/_PartialPage_GlobalRebuildScript.cshtml");
+
+    @*<div class="block-container filter">
+        <select id="x_courseInstanceSelect"></select>
+        <select id="x_studentSelect"></select>
+        <select id="x_programmeSelect"></select>
+    </div>
+    <br />*@
+}
+
+<div class="@((ViewBag.IsStandalone)?"block-container": "") ">
+    <svg id="svg_@(ViewBag.Key)" width="@ViewBag.Width" height="@ViewBag.Height"></svg>
+    <div id="legend_@(ViewBag.Key)"></div>
+</div>
+
+<script>
+    var svg_@(ViewBag.Key) = d3.select("#svg_@(ViewBag.Key)"),
+    margin_@(ViewBag.Key) = { top: 20, right: 20, bottom: 30, left: 40 },
+    width_@(ViewBag.Key) = +svg_@(ViewBag.Key).attr("width") - margin_@(ViewBag.Key).left - margin_@(ViewBag.Key).right,
+    height_@(ViewBag.Key) = +svg_@(ViewBag.Key).attr("height") - margin_@(ViewBag.Key).top - margin_@(ViewBag.Key).bottom,
+    g_@(ViewBag.Key) = svg_@(ViewBag.Key).append("g").attr("transform", "translate(" + margin_@(ViewBag.Key).left + "," + margin_@(ViewBag.Key).top + ")");
+    
+
+    var x0_@(ViewBag.Key) = d3.scaleBand()
+        .rangeRound([0, width_@(ViewBag.Key)])
+        .paddingInner(0.1);
+
+    var x1_@(ViewBag.Key) = d3.scaleBand()
+        .padding(0.05);
+    
+    var y_@(ViewBag.Key) = d3.scaleLinear()
+        .rangeRound([height_@(ViewBag.Key), 0]);
+    
+    @*var z_@(ViewBag.Key)  = d3.scaleOrdinal().range(["#ff7f0e", "#d62728", "#2ca02c", "#1f77b4"]);
+    var zb_@(ViewBag.Key) = d3.scaleOrdinal().range(["#ff7f0e", "#d62728", "#2ca02c", "#1f77b4"]);*@
+    var z_@(ViewBag.Key) = d3.scaleOrdinal().range(["#E73959", "#FFFF99", "#7FC97F", "#386CB0"]);
+    var zb_@(ViewBag.Key) = d3.scaleOrdinal().range(["#E73959", "#FFFF99", "#7FC97F", "#386CB0"]);
+
+
+    //buildChart_@(ViewBag.Key)();
+    GlobalRebuildFunctions.push(buildChart_@(ViewBag.Key));
+
+
+    @*function rebuildCharts() {
+        buildChart_@(ViewBag.Key)();
+    }*@
+    function buildChart_@(ViewBag.Key)() {
+        InsertLoadingIndication(g_@(ViewBag.Key));
+
+        var jsonData = {};
+        //jsonData["timeblock"] = 10;
+        jsonData["courseinstanceid"] = GetSelectedCourseInstance(); //"@(ViewBag.CourseInstanceId)";
+        AddDataFilterFromCombo("#x_studentSelect", "logagentid", jsonData);
+        AddDataFilterFromCombo("#x_programmeSelect", "programmeid", jsonData);
+        GetCsvChartData("@ViewBag.ApiUrl/v1/ChartData/ProgressStatus", type_@(ViewBag.Key), callback_@(ViewBag.Key), jsonData/*"a=2&b=3"*/);
+    }
+
+    function type_@(ViewBag.Key)(d, i, columns) {
+        for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
+        return d;
+    }
+
+    function callback_@(ViewBag.Key)(error, data) {
+        if (error) throw error;
+
+        g_@(ViewBag.Key).selectAll("g").remove();//Clear old chart
+        var g = g_@(ViewBag.Key);
+
+        var keys = data.columns.slice(1);//, 4);//Cut off timeblock (leading) and average (trailing)
+    
+        x0_@(ViewBag.Key).domain(data.map(function (d) { return d.timeblock; }));
+        x1_@(ViewBag.Key).domain(keys).rangeRound([0, x0_@(ViewBag.Key).bandwidth()]);
+        y_@(ViewBag.Key).domain([0, d3.max(data, function (d) { return d3.max(keys, function (key) { return d[key]; }) * 1.01; /*margin*/ })]).nice();
+
+        var node = g.append("g")
+            .selectAll("g")
+            .data(data)
+            .enter().append("g")
+            .attr("transform", function (d) { return "translate(" + (x0_@(ViewBag.Key)(d.timeblock) + 3) + ",0)"; });
+        node.selectAll("rect")
+            .data(function (d) { return keys.map(function (key) { return { key: key, value: d[key] }; }); })
+            .enter().append("rect")
+            //.attr("x", function (d) { return x1(d.key); })//use for 3 column view
+            .attr("x", function (d) { var ret = x1_@(ViewBag.Key)("total"); if (d.key == "average") ret -= 3; return ret; })//use for 1 column view
+            .attr("y", function (d) { return y_@(ViewBag.Key)(d.value); })
+            .attr("width", function (d) { var ret = x1_@(ViewBag.Key).bandwidth() * 4; if (d.key == "average") ret += 6; return ret; })//use for 1 column view
+            //.attr("width", x1.bandwidth())//use for 3 column view
+            .attr("height", function (d) { if (d.key == "average") return 3; else return (height_@(ViewBag.Key) - y_@(ViewBag.Key)(d.value)); })
+            .attr("fill", function (d) { return z_@(ViewBag.Key)(d.key); })
+            .attr("fill-opacity", function (d) { if (d.key == "groupcount") return 0.8; else return 1; })
+            .attr("style", function (d) { return "stroke-width: 1; stroke: " + zb_@(ViewBag.Key)(d.key); });
+
+        //node.selectAll("rect")
+            //.data(function (d) { return keys.map(function (key) { return { key: key, value: d[key] }; }); })
+        //node.enter().append("text")
+        node.append("text")
+            .attr("dy", ".75em")
+            .attr("y", function (d) { return (y_@(ViewBag.Key)(d.count)) - 15; })
+            .attr("x", function (d) { return x1_@(ViewBag.Key).bandwidth() / 2 * 4; })
+            .attr("text-anchor", "middle")
+            .attr("font-size", "0.7em")
+            .text(function (d) {
+                return /*formatCount*/(+d.count) + " / " + d.total;
+            });
+@*        node.append("text")
+            .attr("dy", ".75em")
+            .attr("y", function (d) { return (y_@(ViewBag.Key)(d.groupcount)) - 15; })
+            .attr("x", function (d) { return x1_@(ViewBag.Key).bandwidth() / 2 * 4; })
+            .attr("text-anchor", "middle")
+            .attr("font-size", "0.7em")
+            .text(function (d) {
+                return /*formatCount*/(+d.groupcount) + " / " + d.total;
+            });*@
+
+        g.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + height_@(ViewBag.Key) + ")")
+            .call(d3.axisBottom(x0_@(ViewBag.Key)))
+            .append("text")
+            .attr("x", width_@(ViewBag.Key) / 2)
+            .attr("y", 25)
+            .attr("dy", "0.32em")
+            .attr("fill", "#000")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "start")
+            .text("Week block");
+
+        g.append("g")
+            .attr("class", "axis")
+            .call(d3.axisLeft(y_@(ViewBag.Key)).ticks(null, "s"))
+            .append("text")
+            .attr("x", 2)
+            .attr("y", y_@(ViewBag.Key)(y_@(ViewBag.Key).ticks().pop()) + 0.5)
+            .attr("dy", "0.32em")
+            .attr("fill", "#000")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "start")
+            .text("Amount of activities");
+
+@*        var legend = g.append("g")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", 10)
+            .attr("text-anchor", "end")
+            .selectAll("g")
+            .data(keys.slice().reverse())
+            .enter().append("g")
+            .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+
+        legend.append("rect")
+            .attr("x", width_@(ViewBag.Key) - 19)
+            .attr("width", 19)
+            .attr("height", 19)
+            .attr("fill", z_@(ViewBag.Key))
+            .attr("stroke", zb_@(ViewBag.Key))
+            .attr("stroke-width", 1);
+
+        legend.append("text")
+            .attr("x", width_@(ViewBag.Key) - 24)
+            .attr("y", 9.5)
+            .attr("dy", "0.32em")
+            .text(function (d) {
+                if (d == "count")
+                    return "Amount processed";
+                else if (d == "total")
+                    return "Amount remaining";
+                else if (d == "groupcount")
+                    return "Amount processed by peers";
+                else if (d == "average")
+                    return "Average processed by peers";
+                else
+                    return;
+            });*@
+
+        var legend = d3.select("#legend_@(ViewBag.Key)")
+           .attr("class", "legend")
+           .selectAll("div")
+           .data(keys.slice().reverse())
+           .enter().append("div")
+           .attr("class", "legendBlock");
+
+        legend.append("div")
+            .attr("class", "color")
+            .style("background-color", z_@(ViewBag.Key))
+            .style("border-color", zb_@(ViewBag.Key))
+
+        legend.append("div")
+            .attr("class", "text")
+            .text(function (d) {
+                if (d == "count")
+                    return "Amount processed";
+                else if (d == "total")
+                    return "Amount remaining";
+                else if (d == "groupcount")
+                    return "Total processed by peers";
+                else if (d == "average")
+                    return "Average processed by peers";
+                else
+                    return "unknown";
+            });
+
+    
+    }
+
+
+
+</script>
+
+@*@if(ViewBag.IsStandalone)
+{
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterCourseInstance.cshtml");
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterStudent.cshtml");
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterProgramme.cshtml");
+}*@
+
+
+
+
+
+

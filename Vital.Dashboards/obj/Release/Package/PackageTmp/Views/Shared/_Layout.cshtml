@@ -1,0 +1,331 @@
+﻿
+@{
+        /*ViewBag.CourseInstanceId = 13;*/
+    ViewBag.IsAdmin = Request.Cookies["user-id"] != null && Request.Cookies["user-id"].Value == "-999"
+                && Request.Cookies["user-name"] != null && Request.Cookies["user-name"].Value == "Administrator";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VITAL - @ViewBag.Title</title>
+    <link rel="icon" href="http://www.project-vital.eu/wp-content/uploads/2016/02/cropped-Vital-arrow-final-1-32x32.png" sizes="32x32" />
+    <link rel="icon" href="http://www.project-vital.eu/wp-content/uploads/2016/02/cropped-Vital-arrow-final-1-192x192.png" sizes="192x192" />
+    <link href="@Vital.Dashboards.Objects.Helpers.CacheHelper.GetVersionedResourcePath("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/tooltipster.bundle.min.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+    <style>
+        body
+        {
+            font-family: 'Lato', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+            font-family: 'Lato', sans-serif;
+        }
+    </style>
+
+    <style>
+        
+        .navbar-inverse {
+            background-color: #e73a59;
+            border-color: #e73a59;
+        }
+            .navbar-inverse .navbar-brand {
+                color: white;
+            }
+        .header-banner {
+            height: 350px;
+            position: absolute;
+            z-index: -1;
+            width: 100%;
+            background-color: #e73a59;
+            border-color: #080808;
+            background: url('/Content/Images/achtergrondbeeld_web_overlaycolor.jpg');
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-position: 0 -100px;
+            
+        }
+        @@media only screen and (min-width : 1570px) {
+            .header-banner {
+                background-size: 100%;
+            }
+        }
+        body {
+            background-color:#e8e8e8 
+        }
+        .navbar-header a {
+            color: white;
+            font-weight: bold; 
+        }
+        
+        .header-username {
+            color: white;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .header-logout-panel {
+            display: inline-block;
+            margin-left: 100px;
+        }
+
+        @if (ViewBag.IsStandalone == true)
+        {
+            <text>
+            .block-container {
+                margin-bottom: 20px;
+                padding-top: 20px;
+            }
+            </text>
+        }
+    </style>
+
+    @*<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">*@
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    @*<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>*@
+    <script src="~/Scripts/js.cookie.js"></script>
+    <script>
+        if (!Cookies.get('session-token') || new Date(Cookies.get('session-expiration')) < Date.now()) {
+            @* Session Cookie not present or expired -> redirect if we're not on the login page *@
+            if (location.href.indexOf('/Home/Login') == -1) {
+                location.href = '/Home/Login';
+            }
+        }
+        else {
+        }
+
+    </script>
+
+    @if (ViewBag.RequirePagination == true)
+    {
+        <link href="~/Content/plugins/pagination/pagination.css" rel="stylesheet" />
+        <script type="text/javascript" src="~/Scripts/pagination.js"></script>
+    }
+    @if (ViewBag.RequireD3 == true)
+    {
+        <script src="//d3js.org/d3.v4.min.js"></script>
+        <script src="@Vital.Dashboards.Objects.Helpers.CacheHelper.GetVersionedResourcePath("~/Scripts/vital.dashboards.utils.js")"></script>
+        @Html.Partial("~/Views/Shared/_PartialPage_GlobalRebuildScript.cshtml")
+    }
+</head>
+<body>
+    <div class="header-banner">
+    </div>
+    <div class="navbar navbar-inverse navbar-fixed-top" style="display: none;">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @*<img src="/Content/Images/logo-vital.png" alt="Vital" style="float: left; height: 40px; margin-top: 3px;" />*@
+                <img src="/Content/Images/logo-vital-arrow.png" alt="Vital" style="float: left; height: 30px; margin-top: 10px; margin-right: 15px;" />
+                @if (Request.Url.Host.ToLower().Contains(".uclan."))
+                {
+                    @Html.ActionLink("My dashboard", "Student", "Home", new { Id = "UCLan" }, new { @class = "navbar-brand" })            
+                }
+                else if (Request.Url.Host.ToLower().Contains(".uva."))
+                {
+                    @Html.ActionLink("My dashboard", "Student", "Home", new { Id = "UvA" }, new { @class = "navbar-brand" })            
+                }
+                else
+                {
+                    @Html.ActionLink("My dashboard", "Student", "Home", null, new { @class = "navbar-brand" })            
+                }
+                @Html.ActionLink("More", "More", "Home", null, new { @class = "navbar-brand" })
+                
+                
+            </div>
+            
+            <div class="navbar-header" style="float: right; margin-top: 10px;">
+                <a href="#" onclick="" style="">FAQ</a>
+                <a href="#" onclick="signOut();" style="margin-left: 5px;">Sign out</a>
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container body-content">
+        <div class="row" style="margin-top: 10px; margin-bottom: 35px;">
+            <div class="col-md-3" style="text-align: center; float: left;">
+                @if (Request.Url.Host.ToLower().Contains(".uclan.") || (Vital.Dashboards.Controllers.Base.GlobalActionFilter.ApiUrl.Contains(".uclan.")))
+                {
+                    <text>
+                    <a href="@Url.Action("Student", "Home", new { Id = "UCLan" })">
+                    </text>
+                }
+                else if (Request.Url.Host.ToLower().Contains(".uva.") || (Vital.Dashboards.Controllers.Base.GlobalActionFilter.ApiUrl.Contains(".uva.")))
+                {
+                    <text>
+                    <a href="@Url.Action("Student", "Home", new { Id = "UvA" })">
+                    </text>
+                }
+                else
+                {
+                    <text>
+                    <a href="@Url.Action("Student", "Home")">
+                    </text>
+                }
+                    <img src="/Content/Images/logo-vital-dashboards.svg" alt="Vital Dashboards" style="height: 60px;" />
+                </a>
+            </div>
+            <div class="col-md-9 navbar-icons" style="color: white; text-align: right; margin-top: 20px;">
+                @if (ViewBag.IsAdmin)
+                {
+                    <a href="@Url.Action("Student", "Home")" style="color:white; font-size: 1.2em;">
+                        Student
+                    </a>
+                    <a href="@Url.Action("Instructor", "Home")" style="color:white; font-size: 1.2em;">
+                        Instructor
+                    </a>
+                }
+                <a href="http://www.project-vital.eu/" target="_blank" title="Project website">
+                    <img src="@Url.Content("~/Content/Images/icon-projectsite.svg")" alt="Project website" />
+                </a>
+                <a href="mailto:anouk.gelan@uhasselt.be?subject=VITAL Dashboards" title="Contact" >
+                    <img src="@Url.Content("~/Content/Images/icon-contact.svg")" alt="Contact" />
+                </a>
+
+                @if (Request.Url.Host.ToLower().Contains(".uclan."))
+                {
+                    if (ViewBag.IsAdmin)
+                    {
+                        ViewBag.Guidelines = "Guidelines-UCLan-Instructor.pdf";
+                    }
+                    else
+                    {
+                        ViewBag.Guidelines = "Guidelines-UCLan.pdf";
+                    }
+                }
+                else if (Request.Url.Host.ToLower().Contains(".uva."))
+                {
+                    if (ViewBag.IsAdmin)
+                    {
+                        ViewBag.Guidelines = "Guidelines-UvA-Instructor.pdf";
+                    }
+                    else
+                    {
+                        ViewBag.Guidelines = "Guidelines-UvA.pdf";
+                    }
+                }
+                else
+                {
+                    if (ViewBag.IsAdmin)
+                    {
+                        ViewBag.Guidelines = "Guidelines-UHasselt-Instructor.pdf";
+                    }
+                    else
+                    {
+                        ViewBag.Guidelines = "Guidelines-UHasselt.pdf";
+                    }
+                }
+                <a href="~/Content/Pdf/@ViewBag.Guidelines" title="Guidelines" target="_blank">
+                    <img src="@Url.Content("~/Content/Images/icon-guidelines.svg")" alt="Guidelines" />
+                </a>
+                <a href="@Url.Action("More", "Home")" title="More">
+                    <img src="@Url.Content("~/Content/Images/icon-more.svg")" alt="More" />
+                </a>
+            </div>
+            
+        </div>
+        
+        <div id="body-container">
+             @****** Filter DIV ******@
+             <div class="row" style="padding-bottom: 30px;">
+                <div class="col-md-2">
+                    <div style="text-align: center; -moz-border-radius: 50px; -webkit-border-radius: 50px; border-radius: 50px; width: 100px; height: 100px; margin: 0 auto; background-color: white;">
+                        @if (Request.Url.Host.ToLower().Contains(".uclan."))
+                        {
+                            <img src="/Content/Images/logo-uclan.gif" alt="" style="width: 100px; margin-top: 15px;" />
+                        }
+                        else if (Request.Url.Host.ToLower().Contains(".uva."))
+                        {
+                            <img src="/Content/Images/logo-uva-compact-very.png" alt="" style="width: 50px; margin-top: 25px;" />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/logo-uhasselt.png" alt="" style="height: 50px; margin-top: 27px;" />
+                            @*<img src="/Content/Images/logo-uhasselt-compact.png" alt="" style="height: 60px;" />*@
+                        }
+                    </div>
+                </div>
+                <div class="col-md-10 filter">
+                    <div class="header-username">
+                        @if (Request.Cookies["user-name"] != null)
+                        {
+                            <text>
+                            @(Uri.UnescapeDataString(Request.Cookies["user-name"].Value))
+                            </text>
+                        }
+                    </div>
+                    <div class="header-logout-panel">
+                        <a class="btn" style="background-color: transparent; border: 1px solid white; color: white; padding-left: 20px; padding-right: 20px; padding-top: 0; padding-bottom: 0;" href="#" onclick="signOut();">Logout</a>
+                    </div>
+                     @if (ViewBag.HideFilters != true)
+                     {
+                        <br />
+
+                        <select id="x_courseInstanceSelect"></select>
+                        <select id="x_studentSelect"></select>
+                        <select id="x_programmeSelect"></select>
+                     }
+                </div>
+                 
+            </div>
+
+            @if (ViewBag.HideTitle != true)
+            {
+            <div class="row">
+                 <div class="col-md-12" style="color: white;">
+                    <h2 style="margin-top: 0;">@ViewBag.Title</h2>
+                </div>
+            </div>
+            }
+
+            @RenderBody()
+
+            @if (ViewBag.HideFilters != true)
+            {
+                Html.RenderPartial("~/Views/Shared/_PartialPage_FilterCourseInstance.cshtml");
+                Html.RenderPartial("~/Views/Shared/_PartialPage_FilterStudent.cshtml");
+                Html.RenderPartial("~/Views/Shared/_PartialPage_FilterProgramme.cshtml");
+                Html.RenderPartial("~/Views/Shared/_PartialPage_FilterVerb.cshtml");
+            }
+        </div>
+        <hr style="clear: both;" />
+        <footer>
+            
+            <div style="font-size: 0.5em; float: right; text-align: right;">
+                <p style="margin-bottom: 0px;">Project coordination UHasselt-CTL | +32 11268660 | info@project-vital.eu | Agoralaan, geb. D | 3590 Diepenbeek, Belgium</p>
+                <p>&copy; Copyright @DateTime.Now.Year - VITAL</p>
+            </div>
+
+            @Html.Partial("~/Views/Shared/_PartialPage_Footer_Partners.cshtml")
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/tooltipster.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.infotooltip').tooltipster({
+                contentCloning: true
+            });
+        });
+    </script>
+    
+    
+
+</body>
+</html>

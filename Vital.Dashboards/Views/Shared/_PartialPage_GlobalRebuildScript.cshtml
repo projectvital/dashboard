@@ -1,0 +1,48 @@
+﻿<script>
+    var GlobalRebuildFunctions = [];
+    function rebuildCharts(queueCallback) {
+        var queue_globalRebuildCharts = d3.queue();
+        
+        for (i = 0 ; i < GlobalRebuildFunctions.length ; i++) {
+            queue_globalRebuildCharts.defer(GlobalRebuildFunctions[i]);
+            //GlobalRebuildFunctions[i](queueCallback);
+        }
+        queue_globalRebuildCharts.awaitAll(function (error) {
+            //console.log('#rebuildCharts queue completed');
+            if (queueCallback) queueCallback(null);
+        });
+    }
+
+    var GlobalRebuildDataFunctions = [];
+    function rebuildData(queueCallback) {
+
+        var queue_globalRebuildData = d3.queue();
+        for (i = 0 ; i < GlobalRebuildDataFunctions.length ; i++) {
+            queue_globalRebuildData.defer(GlobalRebuildDataFunctions[i]);
+            //GlobalRebuildDataFunctions[i](queueCallback);
+        }
+        queue_globalRebuildData.awaitAll(function (error) {
+            //console.log('#rebuildData queue completed');
+
+            if (Cookies && document.getElementById("x_studentSelect")) {
+                if (document.getElementById("x_studentSelect").options.length == 2 && Cookies.get("user-id") > 0)//Actual user
+                {
+                    $('#x_studentSelect').val(Cookies.get("user-id")).change();
+                    //document.getElementById("x_studentSelect").selectedIndex = 1;//Auto select the student
+                }
+            }
+            
+            if (queueCallback) queueCallback(null);
+        });
+        //rebuildCharts();
+        
+    }
+    function rebuildData_OLD(queueCallback) {
+        //console.log('#rebuildData start');
+        for (i = 0 ; i < GlobalRebuildDataFunctions.length ; i++) {
+            GlobalRebuildDataFunctions[i](queueCallback);
+        }
+        //rebuildCharts();
+        //console.log('#rebuildData end');
+    }
+</script>

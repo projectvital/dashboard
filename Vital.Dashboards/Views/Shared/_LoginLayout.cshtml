@@ -1,0 +1,153 @@
+﻿
+@{
+    /*ViewBag.CourseInstanceId = 13;*/
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VITAL - @ViewBag.Title</title>
+    <link rel="icon" href="http://www.project-vital.eu/wp-content/uploads/2016/02/cropped-Vital-arrow-final-1-32x32.png" sizes="32x32" />
+    <link rel="icon" href="http://www.project-vital.eu/wp-content/uploads/2016/02/cropped-Vital-arrow-final-1-192x192.png" sizes="192x192" />
+    <link href="@Vital.Dashboards.Objects.Helpers.CacheHelper.GetVersionedResourcePath("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    @*<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <style>
+        body
+        {
+            font-family: 'Lato', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+            font-family: 'Lato', sans-serif;
+        }
+    </style>
+
+    <style>
+        .navbar-inverse {
+            background-color: #e73a59;
+            border-color: #e73a59;
+        }
+            .navbar-inverse .navbar-brand {
+                color: white;
+            }
+        .header-banner {
+            height: 150px;
+            position: absolute;
+            z-index: -1;
+            width: 100%;
+            background-color: #e73a59;
+            border-color: #080808;
+        }
+        body {
+            background-color:#e8e8e8 ;
+        }
+        .navbar-header a {
+            color: white;
+            font-weight: bold; 
+        }
+
+
+
+        .header-banner {
+            display: none;
+        }
+        .navbar {
+            display: none;
+        }
+
+        
+    
+    </style>
+
+    @*<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">*@
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    @*<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>*@
+    <script src="~/Scripts/js.cookie.js"></script>
+    <script>
+        if (!Cookies.get('session-token') || new Date(Cookies.get('session-expiration')) < Date.now()) {
+            @* Session Cookie not present or expired -> redirect if we're not on the login page *@
+            if (location.href.indexOf('/Home/Login') == -1) {
+                location.href = '/Home/Login';
+            }
+        }
+        else {
+        }
+    </script>
+
+    @if (ViewBag.RequirePagination == true)
+    {
+        <link href="~/Content/plugins/pagination/pagination.css" rel="stylesheet" />
+        <script type="text/javascript" src="~/Scripts/pagination.js"></script>
+    }
+    @if(ViewBag.RequireD3 == true)
+    {
+        <script src="//d3js.org/d3.v4.min.js"></script>
+        <script src="@Vital.Dashboards.Objects.Helpers.CacheHelper.GetVersionedResourcePath("~/Scripts/vital.dashboards.utils.js")"></script>
+        @Html.Partial("~/Views/Shared/_PartialPage_GlobalRebuildScript.cshtml")
+    }
+</head>
+<body>
+    @*<div class="header-banner">
+    </div>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src="/Content/Images/logo-vital-arrow.png" alt="Vital" style="float: left; height: 30px; margin-top: 10px; margin-right: 15px;" />
+                @if(Request.Url.Host.ToLower().Contains(".uclan."))
+                {
+                    @Html.ActionLink("My dashboard", "Student", "Home", new { Id = "UCLan" }, new { @class = "navbar-brand" })            
+                }
+                else if (Request.Url.Host.ToLower().Contains(".uva."))
+                {
+                    @Html.ActionLink("My dashboard", "Student", "Home", new { Id = "UvA" }, new { @class = "navbar-brand" })            
+                }
+                else
+                {
+                    @Html.ActionLink("My dashboard", "Student", "Home", null, new { @class = "navbar-brand" })            
+                }
+                @Html.ActionLink("More", "Index", "Home", null, new { @class = "navbar-brand" })
+            </div>
+            
+            <div class="navbar-header" style="float: right; margin-top: 10px;">
+                <a href="#" onclick="" style="">FAQ</a>
+                <a href="#" onclick="signOut();" style="margin-left: 5px;">Sign out</a>
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+            </div>
+        </div>
+    </div>*@
+
+
+        @*<div class="row">
+            <div class="col-md-9" style="color: white;">
+                <h2>@ViewBag.Title</h2>
+            </div>
+            <div class="col-md-3" style="text-align: right;">
+                <img src="/Content/Images/logo-vital.png" alt="Vital" />
+            </div>
+        </div>*@
+        <div id="body-container">
+        @RenderBody()
+        </div>
+       @* <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - VITAL</p>
+        </footer>*@
+
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>*@
+</body>
+</html>

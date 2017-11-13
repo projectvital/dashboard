@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "ActivityByTimeOfDay";
+    ViewBag.RequireD3 = true;
+    ViewBag.InstanceId = Guid.NewGuid().ToString().Replace("-", "");
+    ViewBag.Key = ViewBag.Title + "_" + ViewBag.InstanceId;
+
+    ViewBag.Width = (this.Model != null && this.Model.ContainsKey("width")) ? this.Model["width"] : 960;
+    ViewBag.Height = (this.Model != null && this.Model.ContainsKey("height")) ? this.Model["height"] : 500;
+    ViewBag.IsStandalone = (this.Model == null);
+}
+
+@if (ViewBag.IsStandalone)
+{
+    Html.RenderPartial("~/Views/Shared/_PartialPage_GlobalRebuildScript.cshtml");
+    
+    @*<div class="block-container filter">
+        <select id="x_courseInstanceSelect"></select>
+        <select id="x_studentSelect"></select>
+        <select id="x_programmeSelect"></select>
+    </div>
+    <br />*@
+}
+
+<div class="@((ViewBag.IsStandalone)?"block-container": "") ">
+    <svg id="svg_@(ViewBag.Key)" width="@ViewBag.Width" height="@ViewBag.Height"></svg>
+</div>
+<style>
+    .bar rect {
+        fill: #386cb0;
+    }
+
+    .bar text {
+        fill: #000;
+        font: 10px sans-serif;
+    }
+</style>
+
+<!--
+    For JSON alternative:
+    https://www.dashingd3js.com/svg-basic-shapes-and-d3js
+
+    Using mapping:
+    https://bl.ocks.org/mbostock/5977197
+-->
+
+
+<script>
+
+    var parseDate_@(ViewBag.Key) = d3.timeParse("%H"),//"%m/%d/%Y %H:%M:%S %p"),
+    formatCount_@(ViewBag.Key) = d3.format(",.0f");
+
+    var svg_@(ViewBag.Key) = d3.select("#svg_@(ViewBag.Key)");
+    var margin_@(ViewBag.Key) = { top: 10, right: 30, bottom: 30, left: 60 },
+    width_@(ViewBag.Key) = +svg_@(ViewBag.Key).attr("width") - margin_@(ViewBag.Key).left - margin_@(ViewBag.Key).right,
+    height_@(ViewBag.Key) = +svg_@(ViewBag.Key).attr("height") - margin_@(ViewBag.Key).top - margin_@(ViewBag.Key).bottom;
+    var g_@(ViewBag.Key) = svg_@(ViewBag.Key).append("g");//.attr("transform", "translate(" + margin_@(ViewBag.Key).left + "," + margin_@(ViewBag.Key).top + ")");
+
+    var x_@(ViewBag.Key) = d3.scaleLinear()
+    .domain([0, 24])
+    .rangeRound([0, width_@(ViewBag.Key)]);
+
+    var y_@(ViewBag.Key) = d3.scaleLinear()
+    .range([height_@(ViewBag.Key), 0]);
+
+    var histogram_@(ViewBag.Key) = d3.histogram()
+    .value(function(d) { return d.hour; })
+    .domain(x_@(ViewBag.Key).domain())
+    .thresholds(x_@(ViewBag.Key).ticks(25)/*x.ticks(d3.timeWeek)*/);
+
+    d3.select("#svg_@(ViewBag.Key)")//d3.select("svg")//.append("svg")
+    .attr("width", width_@(ViewBag.Key) + margin_@(ViewBag.Key).left + margin_@(ViewBag.Key).right)
+    .attr("height", height_@(ViewBag.Key) + margin_@(ViewBag.Key).top + margin_@(ViewBag.Key).bottom);
+
+
+
+    //svg.append("g")
+    //    .attr("class", "axis axis--y")
+    //    //.attr("transform", "translate(0," + height + ")")
+    //    .call(d3.axisLeft(y));
+
+
+    
+    //buildChart_@(ViewBag.Key)();
+    GlobalRebuildFunctions.push(buildChart_@(ViewBag.Key));
+
+    //function rebuildCharts() {
+    //    buildChart();
+    //}
+    function buildChart_@(ViewBag.Key)() {
+        InsertLoadingIndication(g_@(ViewBag.Key));
+
+        var jsonData = {};
+        jsonData["courseinstanceid"] = GetSelectedCourseInstance();//"@(ViewBag.CourseInstanceId)";
+        AddDataFilterFromCombo("#x_studentSelect", "logagentid", jsonData);
+        AddDataFilterFromCombo("#x_programmeSelect", "programmeid", jsonData);
+        GetCsvChartData("@ViewBag.ApiUrl/v1/ChartData/ActivityByTimeOfDay", type_@(ViewBag.Key), callback_@(ViewBag.Key), jsonData);
+    }
+
+
+function type_@(ViewBag.Key)(d) {
+        //alert(d.hour);
+        d.hour = +d.hour;//parseDate(d.hour);
+    
+        return d;
+    }
+
+    function callback_@(ViewBag.Key) (error, data) {
+        if (error) throw error;
+
+
+        g_@(ViewBag.Key).selectAll("g").remove();//Clear old chart
+        var groot = g_@(ViewBag.Key).append("g").attr("transform", "translate(" + margin_@(ViewBag.Key).left + "," + margin_@(ViewBag.Key).top + ")");
+    
+        var obj1 = new Object();
+        obj1.hour = 24;
+        obj1.count = "0";
+        data.push(obj1);
+
+        var bins = histogram_@(ViewBag.Key)(data);
+
+        y_@(ViewBag.Key).domain([0, d3.max(bins, function (d)
+        {
+            return +d[0].count; //return d.length;
+        })]);
+
+        groot.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height_@(ViewBag.Key) + ")")
+        .call(d3.axisBottom(x_@(ViewBag.Key)).ticks(25));
+
+        //yAxis = d3.svg.axis().scale(y).orient("left");//.tickFormat(formatPercent);
+        groot.append("g")
+            .attr("class", "axis axis--y")
+            //.attr("transform", "translate(0," + height + ")")
+            .call(d3.axisLeft(y_@(ViewBag.Key).nice()));
+  
+
+
+        var bar = groot.selectAll(".bar")
+            .data(bins)
+            .enter().append("g")
+            .attr("class", "bar")
+            //.attr("data-test", function (d)
+            //{
+            //    return "translate(" + x(d.x0) + "," + (y(d.length)) + " -- " + y(+d[0].count) + ")";
+            //})
+            .attr("transform", function (d)
+            {
+                return "translate(" + x_@(ViewBag.Key)(d.x0) + "," + y_@(ViewBag.Key)(/*y.domain()[1] - */d[0].count) + ")";
+            });
+    
+
+
+        bar.append("rect")
+            .attr("x", 1)
+      
+            //.attr("x", function (d) { return x(d.hour); })
+            //.attr("width", function(d) { return x(d.x1) - x(d.x0) - 1; })
+            //.attr("height", function (d) { return height - y(d.length); });
+            .attr("width", function (d) {
+                if (d.x1 != d.x0)
+                    return x_@(ViewBag.Key)(d.x1) - x_@(ViewBag.Key)(d.x0) - 1;
+                else
+                    return 0;
+            })
+                .attr("height", function (d)
+                {
+                    return y_@(ViewBag.Key)(y_@(ViewBag.Key).domain()[1] - d[0].count);//height - y(d.length);
+                });
+
+        //.attr("height", function (d)
+        //{
+        //    return (y(+d[0].count)) + "px";
+        //})
+    
+
+        bar.append("text")
+            .attr("dy", ".75em")
+            .attr("y", -9)
+            .attr("x", function (d) { return (x_@(ViewBag.Key)(d.x1) - x_@(ViewBag.Key)(d.x0)) / 2; })
+            .attr("text-anchor", "middle")
+            //.attr("rotate", "45")
+            .text(function (d)
+            {
+                if (d[0].hour < 24)
+                    return (+d[0].count);
+                else return "";;
+            });
+    }
+
+</script>
+
+
+
+
+@*@if(ViewBag.IsStandalone)
+{
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterCourseInstance.cshtml");
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterStudent.cshtml");
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterProgramme.cshtml");
+}*@

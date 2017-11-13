@@ -1,0 +1,273 @@
+﻿@{
+    ViewBag.Title = "Instructor";
+    ViewBag.HideTitle = true;
+    ViewBag.RequireD3 = true;
+    ViewBag.RequirePagination = true;
+}
+
+<style>
+    
+    #_ProgressInWeek_container {
+        margin-bottom: 15px;
+        width: 160px;
+        height: 70px;
+        /*width: 250px;
+        height: 115px;*/
+    }
+    /*#_ProgressInWeek_label {
+        font-weight: bold;
+        text-align: center;
+        font-size: 0.9em;
+        max-width: 150px;
+    }*/
+    
+    #body-container {
+        background-color: transparent;
+    }
+
+    .counter-circle {
+        width: 130px;
+        height: 130px;
+        border: 20px solid gray;
+        -moz-border-radius: 65px;
+        -webkit-border-radius: 65px;
+        border-radius: 65px;
+        margin: 0 auto;
+        color: white;
+        font-size: 30px;
+        font-weight: bold;
+        padding-top: 25px;
+    }
+
+    /*.col-md-4.counter, .col-md-6.counter*/
+    .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+        padding-bottom: 10px;
+        padding-left:  8px;
+        padding-right: 8px;
+    }
+    @@media (min-width:500px) {
+            .col-md-2.counter {
+                width: 50%;
+                float: left;
+            }
+    }
+     @@media (min-width:750px) {
+            .col-md-2.counter {
+                width: 33%;
+                float: left;
+            }
+    }
+    @@media (min-width: 992px) {
+            .col-md-2.counter {
+                width: 20%;
+            }
+    }
+</style>
+
+<div class="mainbox">
+
+    <div class="region-top">
+        <div class="container">
+@*            <div class="row">
+                <div class="col-md-3" style="padding: 0;">
+                </div>
+                <div class="col-md-6" style="color: lightgray;">
+                </div>
+                <div class="col-md-3" style="padding: 0;">
+                    <img src="/Content/Images/logo-vital.png" alt="Vital" />
+                </div>
+            </div>*@
+           
+            <div class="row" style="text-align: center;">
+                <div class="col-md-6" style="">
+                    <div class="block-container title">
+                        Hoeveel van de geplande inhoud hebben de studenten per week gebruikt?
+                    </div>
+                    <div class="block-container" style="height: 460px;">
+                        <div class="info infotooltip" data-tooltip-content="#tooltip_graph_course_schedule_instructor">i</div>
+                        <h2>Course schedule & progress</h2>
+                        @Html.Partial("~/Views/Dashboards/ProgressStatusHorizontal.cshtml", new Dictionary<string, string>(){ { "width", "500" }, { "height", "350"} })
+                    </div>
+                </div>
+                <div class="col-md-6" style="/*padding: 0; /*border-right: 2px solid black; */">
+                     <div class="block-container title">
+                        Wanneer werken de studenten online en welk soort activiteiten doen ze vooral?
+                    </div>
+                    <div class="block-container" style="min-height: 460px;">
+                        <div class="info infotooltip" data-tooltip-content="#tooltip_graph_activity_timing_instructor">i</div>
+                        <h2>Activity timing</h2>
+                        @Html.Partial("~/Views/Dashboards/ActivityByTypeByDay.cshtml", new Dictionary<string, string>(){ { "width", "530" }, { "height", "350"} })
+                        @*@Html.Partial("~/Views/Dashboards/ActivityByChapter.cshtml", new Dictionary<string, string>(){ { "width", "500" }, { "height", "350"} })*@
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 0px;">
+                <div class="col-md-12" style="">
+                    <div class="block-container title">
+                        Welke inhouden worden het meest gebruikt in vergelijking met het cursusschema?
+                    </div>
+                 </div>
+            </div>
+			<div class="row" style="text-align: center;">
+                <div class="col-md-12" style="">
+                    <div class="block-container">
+                        <div class="info infotooltip" data-tooltip-content="#tooltip_graph_activity_by_chapter_instructor">i</div>
+                        <h2>Activity by chapter</h2>
+                        
+                        <select id="x_verbSelect" style="float: left; margin-left: 15px;"></select>
+                        @Html.Partial("~/Views/Dashboards/ActivityByChapter.cshtml", new Dictionary<string, string>(){ { "width", "1000" }, { "height", "350"} })
+                    </div>
+                </div>
+            </div>
+           @* <div class="row" style="text-align: center;">
+                <div class="col-md-12" style="">
+                    <div class="block-container">
+                        <div class="info infotooltip" data-tooltip-content="#tooltip_graph_activity_by_chapter">i</div>
+                        <h2>Rankings</h2>
+                        @Html.Partial("~/Views/Dashboards/Ranking.cshtml", new Dictionary<string, string>(){ { "width", "1000" }, { "height", "350"} })
+                    </div>
+                </div>
+            </div>*@
+
+            <div class="row" style="padding-bottom: 0px;">
+                <div class="col-md-6" style="">
+                    
+                 </div>
+                 <div class="col-md-6" style="">
+                     
+                 </div>
+            </div>
+            <div class="row" style="padding-bottom: 0px;">
+                
+                <div class="col-md-12" style="">
+                    <div class="block-container title">
+                        Wat is de huidige prestatie op belangrijke activiteiten?
+                        <div class="info infotooltip" style="background: white; text-align: center; float: right; margin-top: 1px;" data-tooltip-content="#tooltip_counter_global_instructor">i</div>
+                    </div>
+                    <div class="col-md-3" style="">
+                        <div class="block-container counter">
+                            <div class="info infotooltip" data-tooltip-content="#tooltip_counter_completed_exercise_instructor">i</div>
+                            <h2 id="_CompletedExercises_container_name">...</h2>
+                            <div class="counter-circle" id="_CompletedExercises_container_value" style="background-color: #386cb0; border-color: lightblue;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="">
+                        <div class="block-container counter">
+                            <div class="info infotooltip" data-tooltip-content="#tooltip_counter_completed_exercise_50_instructor">i</div>
+                            <h2 id="_CompletedExercisesScore_container_name">...</h2>
+                            <div class="counter-circle" id="_CompletedExercisesScore_container_value" style="background-color: #fdc086; border-color: #ffe4cc;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="">
+                        <div class="block-container counter">
+                            <div class="info infotooltip" data-tooltip-content="#tooltip_counter_completed_assessment_instructor">i</div>
+                            <h2 id="_CompletedAssessments_container_name">...</h2>
+                            <div class="counter-circle" id="_CompletedAssessments_container_value" style="background-color: #BF5B17; border-color: #daa17a;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="">
+                        <div class="block-container counter">
+                            <div class="info infotooltip" data-tooltip-content="#tooltip_counter_completed_assessment_75_instructor">i</div>
+                            <h2 id="_CompletedAssessmentsScore_container_name">...</h2>
+                            <div class="counter-circle" id="_CompletedAssessmentsScore_container_value" style="background-color: #E73959; border-color: #ffc1c2;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-bottom: 0px;">
+                <div class="col-md-6" style="">
+                    <div class="block-container title">
+                        Met welke oefeningen worstelen studenten het meest/minst? @*(selecteer aantal herhalingen, gespendeerde tijd en/of scores)*@
+                    </div>
+                    <div class="block-container">
+                        <div class="info infotooltip" data-tooltip-content="#tooltip_ranking_exercise_multiplecriteria">i</div>
+                        <h2>Exercise difficulty by multiple criteria</h2>
+                        <table id="_ExercisesByMultipleCriteria_container_@(ViewBag.Key)" style="text-align: left; margin-left: 40px;"></table>
+                    </div>
+                </div>
+                <div class="col-md-6" style="">
+                    <div class="block-container title">
+                        Welke theoriepagina’s bekijken studenten het meest/minst? @*(selecteer aantal herhalingen, gespendeerde tijd en/of aantal pdf-prints)*@
+                    </div>
+                    <div class="block-container">
+                         <div class="info infotooltip" data-tooltip-content="#tooltip_ranking_theory_multiplecriteria">i</div>
+                        <h2>Theory difficulty by multiple criteria</h2>
+                        <table id="_TheoryPagesByMultipleCriteria_container_@(ViewBag.Key)" style="text-align: left; margin-left: 40px;"></table>
+                    </div>
+                </div>
+            </div>
+             <div class="row" style="padding-bottom: 0px;">
+                <div class="col-md-12" style="">
+                    <div class="block-container title">
+                        <div class="info infotooltip" data-tooltip-content="#tooltip_ranking_student_performance_groups" style="background: white; text-align: center; float: right; margin-top: 1px;">i</div>
+                        Welke studenten zijn het meest/minst actief online?
+                    </div>
+                 </div>
+            </div>
+            <div class="row" style="padding-bottom: 0px;">
+                <div class="col-md-6" style="">
+                    <div class="block-container" style="padding-left: 20px;">
+                        @*<div class="info infotooltip" data-tooltip-content="#tooltip_ranking_student_performance_group_b">i</div>*@
+                        <h2>Least active students online</h2>
+                        <table id="_StudentsByPerformanceGroupB_container_@(ViewBag.Key)" style="text-align: left; width: 100%;"></table>
+                    </div>
+                </div>
+                <div class="col-md-6" style="">
+                    <div class="block-container" style="padding-left: 20px;">
+                        @*<div class="info infotooltip" data-tooltip-content="#tooltip_ranking_student_performance_group_a">i</div>*@
+                        <h2>Most active students online</h2>
+                        <table id="_StudentsByPerformanceGroupA_container_@(ViewBag.Key)" style="text-align: left; width: 100%;"></table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="text-align: center;">
+                <div class="col-md-12" style="">
+                    <div class="block-container">
+                        <div class="info infotooltip" data-tooltip-content="#tooltip_graph_time_spent_by_chapter_instructor">i</div>
+                        <h2>Time spent by chapter</h2>
+                        
+                        @Html.Partial("~/Views/Dashboards/TimeSpentByChapter.cshtml", new Dictionary<string, string>(){ { "width", "1000" }, { "height", "350"} })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("~/Views/Shared/_PartialPage_Tooltips_UvA.cshtml")
+
+<script src="~/Scripts/progressbar.min.js"></script>
+<script>
+    GlobalRebuildFunctions.push(buildCounts_@(ViewBag.Key));
+   
+    function buildCounts_@(ViewBag.Key)() {
+        var parameters = {};
+        parameters["courseinstanceid"] = GetSelectedCourseInstance();//"@(ViewBag.CourseInstanceId)";
+        AddDataFilterFromCombo("#x_studentSelect", "logagentid", parameters);
+        AddDataFilterFromCombo("#x_programmeSelect", "programmeid", parameters);
+                
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedExercises/Average', function (error, data) { 
+            FillBigVisualControlWithCountModel("_CompletedExercises_container_value", "_CompletedExercises_container_name", error, data);
+        }, parameters);
+        
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedExercises/Average/50', function (error, data) {
+            FillBigVisualControlWithCountModel("_CompletedExercisesScore_container_value", "_CompletedExercisesScore_container_name", error, data);
+        }, parameters);
+
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedAssessments/Average', function (error, data) {
+            FillBigVisualControlWithCountModel("_CompletedAssessments_container_value", "_CompletedAssessments_container_name", error, data);
+        }, parameters);
+        
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedAssessments/Average/75', function (error, data) {
+            FillBigVisualControlWithCountModel("_CompletedAssessmentsScore_container_value", "_CompletedAssessmentsScore_container_name", error, data);
+        }, parameters);
+
+        GetRankingData("_TheoryPagesByMultipleCriteria_container_@(ViewBag.Key)", '@ViewBag.ApiUrl/v1/Data/Content/TheoryPagesByMultipleCriteria/', parameters, 'GenericContent');
+        GetRankingData("_ExercisesByMultipleCriteria_container_@(ViewBag.Key)", '@ViewBag.ApiUrl/v1/Data/Content/ExercisesByMultipleCriteria/', parameters, 'Exercise');
+
+        GetRankingData("_StudentsByPerformanceGroupB_container_@(ViewBag.Key)", '@ViewBag.ApiUrl/v1/Data/Content/StudentsByPerformance/B', parameters, 'Student-UvA');
+        GetRankingData("_StudentsByPerformanceGroupA_container_@(ViewBag.Key)", '@ViewBag.ApiUrl/v1/Data/Content/StudentsByPerformance/A', parameters, 'Student-UvA');
+    }
+</script>
+

@@ -1,0 +1,228 @@
+﻿
+@{
+    ViewBag.Title = "ProgressStatus";
+    ViewBag.RequireD3 = true;
+    ViewBag.InstanceId = Guid.NewGuid().ToString().Replace("-", "");
+    ViewBag.Key = ViewBag.Title + "_" + ViewBag.InstanceId;
+    
+    ViewBag.Width = (this.Model != null && this.Model.ContainsKey("width")) ? this.Model["width"] : 960;
+    ViewBag.Height = (this.Model != null && this.Model.ContainsKey("height")) ? this.Model["height"] : 500;
+    //ViewBag.IsStandalone = (this.ViewContext.Controller as Vital.Dashboards.Controllers.Base.BaseController).IsControlStandalone();
+    ViewBag.IsStandalone = (this.Model == null);// && this.Model.ContainsKey("iswidget") && this.Model["iswidget"] == "true") ? false : true;
+}
+
+
+@if(ViewBag.IsStandalone)
+{
+    Html.RenderPartial("~/Views/Shared/_PartialPage_GlobalRebuildScript.cshtml");
+
+    @*<div class="block-container filter">
+        <select id="x_courseInstanceSelect"></select>
+        <select id="x_studentSelect"></select>
+        <select id="x_programmeSelect"></select>
+    </div>
+    <br />*@
+}
+
+<style>
+    #svg_@(ViewBag.Key) rect.average {
+        display: none;
+    }
+</style>
+
+<div class="@((ViewBag.IsStandalone)?"block-container": "") ">
+    <svg id="svg_@(ViewBag.Key)" width="@ViewBag.Width" height="@ViewBag.Height"></svg>
+    <div id="legend_@(ViewBag.Key)"></div>
+</div>
+
+<script>
+    var svg_@(ViewBag.Key) = d3.select("#svg_@(ViewBag.Key)"),
+    margin_@(ViewBag.Key) = { top: 20, right: 30, bottom: 30, left: 30 },
+    width_@(ViewBag.Key) = +svg_@(ViewBag.Key).attr("width") - margin_@(ViewBag.Key).left - margin_@(ViewBag.Key).right,
+    height_@(ViewBag.Key) = +svg_@(ViewBag.Key).attr("height") - margin_@(ViewBag.Key).top - margin_@(ViewBag.Key).bottom,
+    g_@(ViewBag.Key) = svg_@(ViewBag.Key).append("g").attr("transform", "translate(" + margin_@(ViewBag.Key).left + "," + margin_@(ViewBag.Key).top + ")");
+    
+
+    @*    var x0_@(ViewBag.Key) = d3.scaleBand()
+        .rangeRound([0, width_@(ViewBag.Key)])
+        .paddingInner(0.1);
+
+    var x1_@(ViewBag.Key) = d3.scaleBand()
+        .padding(0.05);
+    
+    var y_@(ViewBag.Key) = d3.scaleLinear()
+        .rangeRound([height_@(ViewBag.Key), 0]);*@
+
+
+    var x0_@(ViewBag.Key) = d3.scaleBand()
+        .rangeRound([height_@(ViewBag.Key), 0])
+        .paddingInner(0.1);
+
+    var x1_@(ViewBag.Key) = d3.scaleBand()
+        .padding(0.05);
+
+    var y_@(ViewBag.Key) = d3.scaleLinear()
+        .rangeRound([0, width_@(ViewBag.Key)]);
+
+    
+    @*var z_@(ViewBag.Key)  = d3.scaleOrdinal().range(["#ff7f0e", "#d62728", "#2ca02c", "#1f77b4"]);
+    var zb_@(ViewBag.Key) = d3.scaleOrdinal().range(["#ff7f0e", "#d62728", "#2ca02c", "#1f77b4"]);*@
+    var z_@(ViewBag.Key) = d3.scaleOrdinal().range(["#E73959", "#7FC97F", "transparent"/*"#FFFF99"*/, "#386CB0"]);
+    var zb_@(ViewBag.Key) = d3.scaleOrdinal().range(["#E73959", "#7FC97F", "transparent"/*"#fdbb2f"*/, "#386CB0"]);//FFFF99
+
+
+
+    //buildChart_@(ViewBag.Key)();
+    GlobalRebuildFunctions.push(buildChart_@(ViewBag.Key));
+
+
+    @*function rebuildCharts() {
+        buildChart_@(ViewBag.Key)();
+    }*@
+    function buildChart_@(ViewBag.Key)() {
+        InsertLoadingIndication(g_@(ViewBag.Key));
+
+        var jsonData = {};
+        //jsonData["timeblock"] = 10;
+        jsonData["courseinstanceid"] = GetSelectedCourseInstance(); //"@(ViewBag.CourseInstanceId)";
+        AddDataFilterFromCombo("#x_studentSelect", "logagentid", jsonData);
+        AddDataFilterFromCombo("#x_programmeSelect", "programmeid", jsonData);
+        GetCsvChartData("@ViewBag.ApiUrl/v1/ChartData/ProgressStatus", type_@(ViewBag.Key), callback_@(ViewBag.Key), jsonData/*"a=2&b=3"*/);
+    }
+
+    function type_@(ViewBag.Key)(d, i, columns) {
+        for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
+        return d;
+    }
+
+    function callback_@(ViewBag.Key)(error, data) {
+        if (error) throw error;
+
+        g_@(ViewBag.Key).selectAll("g").remove();//Clear old chart
+        var g = g_@(ViewBag.Key);
+
+        //timeblock,total,groupcount,count,average
+        var keys = data.columns.slice(1);//, 4);//Cut off timeblock (leading) and average (trailing)
+        @*rmenten 2017-07-17: switch 'count' and 'groupcount', so the small inline bar is also above the green bar.*@
+        var tmp = keys[2];
+        keys[2] = keys[1];
+        keys[1] = tmp;
+
+        x0_@(ViewBag.Key).domain(data.map(function (d) { return d.timeblock; }));
+        x1_@(ViewBag.Key).domain(keys).rangeRound([0, x0_@(ViewBag.Key).bandwidth()]);
+        y_@(ViewBag.Key).domain([0, d3.max(data, function (d) { return d3.max(keys, function (key) { return d[key]; }) * 1.01; /*margin*/ })]).nice();
+
+        var node = g.append("g")
+            .selectAll("g")
+            .data(data)
+            .enter().append("g")
+            .attr("transform", function (d) { return "translate(0," + (x0_@(ViewBag.Key)(d.timeblock) +0) + ")"; });
+        node.selectAll("rect")
+            .data(function (d) { return keys.map(function (key) { return { key: key, value: d[key] }; }); })
+            .enter().append("rect")
+            //.attr("x", function (d) { return x1(d.key); })//use for 3 column view
+            .attr("y", function (d) { var ret = x1_@(ViewBag.Key)("total"); if (d.key == "average") ret -= 3; if (d.key == "groupcount") ret += (x1_@(ViewBag.Key).bandwidth()*1.5); return ret; })//use for 1 column view
+            .attr("x", function (d) { if (d.key == "average") return y_@(ViewBag.Key)(d.value); else return 0; })
+            .attr("height", function (d) { var ret = x1_@(ViewBag.Key).bandwidth() * 4; if (d.key == "average") ret += 6; if (d.key == "groupcount") ret *= 0.25; return ret; })//use for 1 column view
+            //.attr("width", x1.bandwidth())//use for 3 column view
+            .attr("width", function (d) { if (d.key == "average") return 3; else return (y_@(ViewBag.Key)(d.value)); })
+            .attr("class", function (d) { if (d.key == "average") return "average"; })
+            .attr("fill", function (d) { return z_@(ViewBag.Key)(d.key); })
+            .attr("fill-opacity", function (d) { if (d.key == "groupcount") return 1/*0.8*/; else return 1; })
+            .attr("style", function (d) { return "stroke-width: 1; stroke: " + zb_@(ViewBag.Key)(d.key); });
+
+        node.append("text")
+            .attr("dy", ".75em")
+            .attr("x", function (d) { return 5 @*(y_@(ViewBag.Key)(d.count)) + 5;*@ })
+            .attr("y", function (d) { return x1_@(ViewBag.Key).bandwidth() / 2 * 4 -2; })
+            .attr("text-anchor", "start")
+            .attr("font-size", "0.7em")
+            .text(function (d) {
+                return /*formatCount*/(+d.count) + " / " + d.total;
+            });
+
+        g.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + height_@(ViewBag.Key) + ")")
+            .call(d3.axisBottom(y_@(ViewBag.Key)))
+            .append("text")
+            .attr("x", width_@(ViewBag.Key) / 2)
+            .attr("y", 25)
+            .attr("dy", "0.32em")
+            .attr("fill", "#000")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "start")
+            .text("Amount of activities");
+
+        g.append("g")
+            .attr("class", "axis")
+            .call(d3.axisLeft(x0_@(ViewBag.Key)).ticks(null, "s"))
+            .append("text")
+            .attr("y", -3)
+            //.attr("x", x0_@(ViewBag.Key)(x0_@(ViewBag.Key).ticks().pop()) + 0.5)
+            .attr("dy", "0.32em")
+            .attr("fill", "#000")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "start")
+            .text("Week block");
+
+
+        //rmenten 2017-10-18: remove group count from legend
+        var tmp = keys[2];
+        keys[2] = keys[0];
+        keys[0] = tmp;
+        keys = keys.slice(1);
+
+
+        var legend = d3.select("#legend_@(ViewBag.Key)")
+          .attr("class", "legend")
+          .selectAll("div")
+          .data(keys.slice().reverse())
+          .enter().append("div")
+          .attr("class", "legendBlock")
+          .attr("onclick", function (d) {
+              if (d == "average")
+                  return "$('#svg_@(ViewBag.Key) rect.average').toggle()";
+              //"alert('test');";
+          });
+
+        legend.append("div")
+            .attr("class", "color")
+            .style("background-color", z_@(ViewBag.Key))
+            .style("border-color", zb_@(ViewBag.Key))
+
+        legend.append("div")
+            .attr("class", "text")
+            .text(function (d) {
+                if (d == "count")
+                    return "Amount processed";
+                else if (d == "total")
+                    return "Amount remaining";
+                else if (d == "groupcount")
+                    return "Total processed by peers";
+                else if (d == "average")
+                    return "Average processed by peers (click to show)";
+                else
+                    return "unknown";
+            });
+
+
+
+    }
+
+
+
+</script>
+
+@*@if(ViewBag.IsStandalone)
+{
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterCourseInstance.cshtml");
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterStudent.cshtml");
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterProgramme.cshtml");
+}*@
+
+
+
+
+
+

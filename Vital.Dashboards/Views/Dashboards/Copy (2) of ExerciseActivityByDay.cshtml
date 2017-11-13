@@ -1,0 +1,232 @@
+﻿
+@{
+    ViewBag.Title = "ExerciseActivityByDay";
+    ViewBag.RequireD3 = true;
+}
+
+
+<style>
+
+.axis--x path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.legend {
+    font-size: 16px;
+    font-weight: bold;
+    float: right;
+    border: 1px solid black;
+    border-radius: 0 0 10px 10px;
+    width: 175px;
+    min-height: 50px;
+    display: none;
+}
+.legendTitle
+{
+    background-color: antiquewhite;
+    border-bottom: 3px double black;
+    padding: 2px;
+}
+.legendContent{
+    padding: 2px;
+}
+.legendColorSphere {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    top: 12px;
+    left: 12px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
+</style>
+
+<select id="x_studentSelect">
+</select>
+@*<select id="x_verbSelect">
+</select>*@
+<br />
+<svg width="960" height="500"></svg>
+
+
+<div class="legend">
+    <div class="legendTitle">
+        Selection detail:
+    </div>
+    <div class="legendContent">
+
+    </div>
+</div>
+
+<script>
+    var margin = { top: 20, right: 20, bottom: 30, left: 50 },
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+    // parse the date / time
+    var parseTime = d3.timeParse("%d-%b-%y");
+
+    // set the ranges
+    var x = d3.scaleTime().range([0, width]);
+    var y = d3.scaleLinear().range([height, 0]);
+
+    // define the 1st line
+    var valueline = d3.line()
+        .x(function (d) { return x(d.date); })
+        .y(function (d) { return y(d.amount_accessed_exercises); });
+
+    // define the 2nd line
+    var valueline2 = d3.line()
+        .x(function (d) { return x(d.date); })
+        .y(function (d) { return y(d.amount_completed_exercises); });
+
+    // define the 2nd line
+    var valueline3 = d3.line()
+        .x(function (d) { return x(d.date); })
+        .y(function (d) { return y(d.amount_accessed_theorypages); });
+
+    // append the svg obgect to the body of the page
+    // appends a 'group' element to 'svg'
+    // moves the 'group' element to the top left margin
+    var svg = d3.select("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+    buildChart();
+
+
+    function rebuildCharts() {
+        buildChart();
+    }
+    function buildChart() {
+
+        var jsonData = {};
+        //jsonData["timeblock"] = 10;
+        jsonData["courseinstanceid"] = "@(ViewBag.CourseInstanceId)";
+        AddDataFilterFromCombo("#x_studentSelect", "logagentid", jsonData);
+        //AddDataFilterFromCombo("#x_verbSelect", "logverbid", jsonData);
+
+        GetCsvChartData("@ViewBag.ApiUrl/v1/ChartData/ActivityByDay", type, callback, jsonData/*"a=2&b=3"*/);
+    }
+
+    function type(d, _, columns) {
+        d.date = parseTime(d.date);
+        for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
+        return d;
+    }
+
+    function callback(error, data) {
+        if (error) throw error;
+
+        // format the data
+        data.forEach(function (d) {
+            d.date = parseTime(d.date);
+            d.amount_accessed_exercises = +d.amount_accessed_exercises;
+            d.amount_completed_exercises = +d.amount_completed_exercises;
+            d.amount_accessed_theorypages = +d.amount_accessed_theorypages;
+        });
+
+        // Scale the range of the data
+        x.domain(d3.extent(data, function (d) { return d.date; }));
+        y.domain([0, d3.max(data, function (d) {
+            return Math.max(d.amount_accessed_exercises, d.amount_completed_exercises, d.amount_accessed_theorypages);
+        })]);
+
+        // Add the valueline path.
+        svg.append("path")
+            .data([data])
+            .attr("class", "line")
+            .attr("d", valueline);
+
+        // Add the valueline2 path.
+        svg.append("path")
+            .data([data])
+            .attr("class", "line")
+            .style("stroke", "red")
+            .attr("d", valueline2);
+
+        // Add the valueline3 path.
+        svg.append("path")
+            .data([data])
+            .attr("class", "line")
+            .style("stroke", "green")
+            .attr("d", valueline3);
+
+        // Add the X Axis
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        // Add the Y Axis
+        svg.append("g")
+            .call(d3.axisLeft(y));
+
+
+
+
+        g.append("rect")
+          .attr("class", "overlay")
+          .attr("width", width)
+          .attr("height", height)
+          .on("mouseover", function () { focusPanel.style("display", null); $(".legend").show(); })
+          .on("mouseout", function () { focusPanel.style("display", "none"); $(".legend").hide(); })
+          .on("mousemove", mousemove);
+
+        var formatDate = d3.timeFormat("%Y-%m-%d");
+        var formatValue = d3.format(",.0f");
+        var bisectDate = d3.bisector(function (d) { return d.date; }).left;
+        var formatCurrency = function (d) { return "" + formatValue(d); };
+        function mousemove() {
+            var x0 = x.invert(d3.mouse(this)[0]),
+                i = bisectDate(data, x0, 1),
+                d0 = data[i - 1],
+                d1 = data[i],
+                d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+
+            focusTotal.attr("transform", "translate(" + x(d.date) + "," + y(d.amount_accessed) + ")");
+            focusTotal.select("text").text(formatCurrency(d.amount_accessed));
+            focusSingle.attr("transform", "translate(" + x(d.date) + "," + y(d.amount_completed_exercises) + ")");
+            focusSingle.select("text").text(formatCurrency(d.amount_completed_exercises));
+            focusLine.attr("x1", "" + x(d.date));
+            focusLine.attr("x2", "" + x(d.date));
+            focusTitle.attr("transform", "translate(" + x(d.date) + "," + (height + 22) + ")");
+            focusTitle.select("text").text(formatDate(d.date));
+
+            $(".legendContent").html("Date: " + formatDate(d.date) +
+                "<br /><div class=\"legendColorSphere\" style=\"background-color:" + z("amount_accessed_exercises") + "\"></div><span>Accessed: " + formatCurrency(d.amount_accessed_exercises) + "</span>" +
+                "<br /><div class=\"legendColorSphere\" style=\"background-color:" + z("amount_completed_exercises") + "\"></div><span>Completed: " + formatCurrency(d.amount_completed_exercises) + "</span>" +
+                "<br /><div class=\"legendColorSphere\" style=\"background-color:" + z("amount_accessed_theorypages") + "\"></div><span>Accessed: " + formatCurrency(d.amount_accessed_theorypages) + "</span>"
+                );
+
+        }
+
+    }
+
+
+
+</script>
+
+@Html.Partial("~/Views/Shared/_PartialPage_FilterStudent.cshtml")
+@*Html.Partial("~/Views/Shared/_PartialPage_FilterVerb.cshtml")*@
+
+
+
+
+
+

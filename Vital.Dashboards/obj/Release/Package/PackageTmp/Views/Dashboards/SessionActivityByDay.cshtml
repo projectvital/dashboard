@@ -1,0 +1,233 @@
+﻿@{
+    ViewBag.Title = "SessionActivityByDay";
+    ViewBag.RequireD3 = true;
+}
+
+
+<style>
+
+.axis--x path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.legend {
+    font-size: 16px;
+    font-weight: bold;
+    float: right;
+    border: 1px solid black;
+    border-radius: 0 0 10px 10px;
+    width: 175px;
+    min-height: 50px;
+    display: none;
+}
+.legendTitle
+{
+    background-color: antiquewhite;
+    border-bottom: 3px double black;
+    padding: 2px;
+}
+.legendContent{
+    padding: 2px;
+}
+.legendColorSphere {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    top: 12px;
+    left: 12px;
+    margin-right: 5px;
+    border-radius: 50%;
+}
+</style>
+<svg width="960" height="500"></svg>
+
+<div class="legend">
+    <div class="legendTitle">
+        Selection detail:
+    </div>
+    <div class="legendContent">
+
+    </div>
+</div>
+<script>
+
+    var svg = d3.select("svg"),
+        margin = { top: 20, right: 80, bottom: 30, left: 50 },
+        width = svg.attr("width") - margin.left - margin.right,
+        height = svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var parseTime = d3.timeParse("%Y-%m-%d");
+
+    var x = d3.scaleTime().range([0, width]),
+        y = d3.scaleLinear().range([height, 0]),
+        z = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var line = d3.line()
+        //.curve(d3.curveBasis)
+        //.curve(d3.curveCatmullRomOpen)
+        //.curve(d3.curveLinear)
+        .curve(d3.curveMonotoneX)
+        //https://bl.ocks.org/d3noob/ced1b9b18bd8192d2c898884033b5529
+        .x(function (d) { return x(d.date); })
+        .y(function (d) { return y(d.temperature); });
+
+    d3.csv("../FakeDataSource/SessionActivityByDay.html", type, function (error, data) {
+        if (error) throw error;
+
+        var cities = data.columns.slice(1).map(function (id) {
+            return {
+                id: id,
+                values: data.map(function (d) {
+                    return { date: d.date, temperature: d[id] };
+                })
+            };
+        });
+
+        x.domain(d3.extent(data, function (d) { return d.date; }));
+
+        y.domain([
+          d3.min(cities, function (c) { return d3.min(c.values, function (d) { return d.temperature; }); }),
+          d3.max(cities, function (c) { return d3.max(c.values, function (d) { return d.temperature; }); })
+        ]);
+
+        z.domain(cities.map(function (c) { return c.id; }));
+
+        g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+
+        g.append("g")
+            .attr("class", "axis axis--y")
+            .call(d3.axisLeft(y))
+          .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", "0.71em")
+            .attr("fill", "#000")
+            .text("Amount of statements");
+
+        var city = g.selectAll(".city")
+          .data(cities)
+          .enter().append("g")
+            .attr("class", "city");
+
+        city.append("path")
+            .attr("class", "line")
+            .attr("d", function (d) { return line(d.values); })
+            .style("stroke", function (d) { return z(d.id); });
+
+        city.append("text")
+            .datum(function (d) { return { id: d.id, value: d.values[d.values.length - 1] }; })
+            .attr("transform", function (d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+            .attr("x", 3)
+            .attr("dy", "0.35em")
+            .style("font", "10px sans-serif")
+        ;//.text(function (d) { return d.id; });
+
+
+        var focusPanel = g.append("g")
+                  .attr("class", "focus")
+          .style("display", "none");
+
+        var focusVal1 = focusPanel.append("g");
+        focusVal1.append("circle")
+            .attr("r", 4.5);
+        focusVal1.append("text")
+            .attr("x", 9)
+            .attr("dy", ".35em");
+
+        var focusVal2 = focusPanel.append("g");
+        focusVal2.append("circle")
+            .attr("r", 4.5);
+        focusVal2.append("text")
+            .attr("x", 9)
+            .attr("dy", ".35em");
+
+
+        var focusVal3 = focusPanel.append("g");
+        focusVal3.append("circle")
+            .attr("r", 4.5);
+        focusVal3.append("text")
+            .attr("x", 9)
+            .attr("dy", ".35em");
+
+        
+        var focusLine = focusPanel.append("line")
+            //.attr("x1", x(today))  //<<== change your code here
+            .attr("y1", 0)
+            //.attr("x2", x(today))  //<<== and here
+            .attr("y2", height)
+            .style("stroke-width", 1)
+            .style("stroke", "black")
+            .style("fill", "none");
+
+        var focusTitle = focusPanel.append("g");
+        focusTitle.append("text")
+            .attr("x", 9)
+            .style("stroke", "gray")
+            .attr("dy", ".35em")
+            .style("text-anchor", "middle");
+
+          
+          
+
+
+        g.append("rect")
+          .attr("class", "overlay")
+          .attr("width", width)
+          .attr("height", height)
+          .on("mouseover", function () { focusPanel.style("display", null); $(".legend").show(); })
+          .on("mouseout", function () { focusPanel.style("display", "none"); $(".legend").hide(); })
+          .on("mousemove", mousemove);
+
+        var formatDate = d3.timeFormat("%Y-%m-%d");
+        var formatValue = d3.format(",.0f");
+        var bisectDate = d3.bisector(function (d) { return d.date; }).left;
+        var formatCurrency = function (d) { return "" + formatValue(d); };
+        function mousemove() {
+            var x0 = x.invert(d3.mouse(this)[0]),
+                i = bisectDate(data, x0, 1),
+                d0 = data[i - 1],
+                d1 = data[i],
+                d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+
+            focusVal1.attr("transform", "translate(" + x(d.date) + "," + y(d.login_count) + ")");
+            focusVal1.select("text").text(formatCurrency(d.login_count));
+            focusVal2.attr("transform", "translate(" + x(d.date) + "," + y(d.logout_count) + ")");
+            focusVal2.select("text").text(formatCurrency(d.logout_count));
+            focusVal3.attr("transform", "translate(" + x(d.date) + "," + y(d.abandonedsession_count) + ")");
+            focusVal3.select("text").text(formatCurrency(d.abandonedsession_count));
+            focusLine.attr("x1", "" + x(d.date));
+            focusLine.attr("x2", "" + x(d.date));
+            focusTitle.attr("transform", "translate(" + x(d.date) + "," + (height+22) + ")");
+            focusTitle.select("text").text(formatDate(d.date));
+
+            $(".legendContent").html("Date: " + formatDate(d.date) +
+                "<br /><div class=\"legendColorSphere\" style=\"background-color:" + z("login_count") + "\"></div><span>Logins: " + formatCurrency(d.login_count) + "</span>" +
+                "<br /><div class=\"legendColorSphere\" style=\"background-color:" + z("logout_count") + "\"></div><span>Logouts: " + formatCurrency(d.logout_count) + "</span>" +
+                "<br /><div class=\"legendColorSphere\" style=\"background-color:" + z("abandonedsession_count") + "\"></div><span>Session abandoned: " + formatCurrency(d.abandonedsession_count) + "</span>"
+                );
+                
+        }
+    });
+
+    function type(d, _, columns) {
+        d.date = parseTime(d.date);
+        for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
+        return d;
+    }
+
+</script>

@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "Counts";
+    ViewBag.RequireD3 = true;
+    ViewBag.Key = ViewBag.Title + "_" + ViewBag.InstanceId;
+    ViewBag.IsStandalone = (this.Model == null);
+}
+
+
+@if(ViewBag.IsStandalone)
+{
+    Html.RenderPartial("~/Views/Shared/_PartialPage_GlobalRebuildScript.cshtml");
+   @*<div class="block-container filter">    
+        <select id="x_courseInstanceSelect"></select>
+        <select id="x_studentSelect"></select>
+        <select id="x_programmeSelect"></select>
+    </div>
+    <br />*@
+}
+
+<div class="@((ViewBag.IsStandalone)?"block-container": "")" style="text-align: left; padding: 10px;">
+    <div id="_CompletedExercises_container_@(ViewBag.Key)"></div>
+    <div id="_CompletedExercisesScore50_container_@(ViewBag.Key)"></div>
+    <div id="_CompletedExercisesScore70_container_@(ViewBag.Key)"></div>
+    <div id="_PlayedAudio_container_@(ViewBag.Key)"></div>
+    <div id="_PrintedPdf_container_@(ViewBag.Key)"></div>
+    <div id="_RecordedVoice_container_@(ViewBag.Key)"></div>
+    <div id="_AccessedResources_container_@(ViewBag.Key)"></div>
+    <div id="_Posts_container_@(ViewBag.Key)"></div>
+    <div id="_AccessedFeedback_container_@(ViewBag.Key)"></div>
+    <div id="_CompletedAssessments_container_@(ViewBag.Key)"></div>
+    <div id="_CompletedAssessmentsScore75_container_@(ViewBag.Key)"></div>
+</div>
+<style>
+
+</style>
+
+
+<script>
+    //onDocumentReady(function () {
+        //buildCounts_@(ViewBag.Key)();
+        GlobalRebuildFunctions.push(buildCounts_@(ViewBag.Key));
+    //});
+
+    function buildCounts_@(ViewBag.Key)() {
+        var parameters = {};
+        parameters["courseinstanceid"] = GetSelectedCourseInstance();//"@(ViewBag.CourseInstanceId)";
+        AddDataFilterFromCombo("#x_studentSelect", "logagentid", parameters);
+        AddDataFilterFromCombo("#x_programmeSelect", "programmeid", parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedExercises', function (error, data) { FillControlWithCountModel("_CompletedExercises_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedExercises/70', function (error, data) { FillControlWithCountModel("_CompletedExercisesScore70_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedExercises/50', function (error, data) { FillControlWithCountModel("_CompletedExercisesScore50_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/PlayedAudio', function (error, data) { FillControlWithCountModel("_PlayedAudio_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/PrintedPdf', function (error, data) { FillControlWithCountModel("_PrintedPdf_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/RecordedVoice', function (error, data) { FillControlWithCountModel("_RecordedVoice_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/AccessedResources', function (error, data) { FillControlWithCountModel("_AccessedResources_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/Posts', function (error, data) { FillControlWithCountModel("_Posts_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/AccessedFeedback', function (error, data) { FillControlWithCountModel("_AccessedFeedback_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedAssessments', function (error, data) { FillControlWithCountModel("_CompletedAssessments_container_@(ViewBag.Key)", error, data); }, parameters);
+        GetData('@ViewBag.ApiUrl/v1/Data/Count/CompletedAssessments/75', function (error, data) { FillControlWithCountModel("_CompletedAssessmentsScore75_container_@(ViewBag.Key)", error, data); }, parameters);
+    }
+
+</script>
+
+@*@if (ViewBag.IsStandalone)
+{
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterCourseInstance.cshtml");
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterStudent.cshtml");
+    Html.RenderPartial("~/Views/Shared/_PartialPage_FilterProgramme.cshtml");
+}*@
+
+
+
+
+
+
+

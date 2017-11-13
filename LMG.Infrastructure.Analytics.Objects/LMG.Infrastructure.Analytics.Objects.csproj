@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8A3E5A8D-2EA9-4DA3-9853-15DAF98BA1A5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LMG.Infrastructure.Analytics.Objects</RootNamespace>
+    <AssemblyName>LMG.Infrastructure.Analytics.Objects</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;ACTIVATE_SQLSERVER_DRIVER</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OriginDatabaseLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\LMG.Infrastructure.Analytics.Wcf\packages\OriginDatabaseLib\OriginDatabaseLib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DatabaseAccess.cs" />
+    <Compile Include="DB\Base\BaseObject.cs" />
+    <Compile Include="DB\LogAgentDashboardSession.cs" />
+    <Compile Include="DB\LogMetadataActivityInCourse.cs" />
+    <Compile Include="DB\LogMetadataAgentInCourseInstance.cs" />
+    <Compile Include="DB\LogMetadataCourse.cs" />
+    <Compile Include="DB\LogMetadataCourseInstance.cs" />
+    <Compile Include="DB\LogMetadataCourseInstanceClass.cs" />
+    <Compile Include="DB\LogMetadataCourseInstanceClassType.cs" />
+    <Compile Include="DB\LogMetadataCourseInstanceTimeBlock.cs" />
+    <Compile Include="DB\LogMetadataCourseProgramme.cs" />
+    <Compile Include="DB\LogActivity.cs" />
+    <Compile Include="DB\LogActivityDefinition.cs" />
+    <Compile Include="DB\LogActivityDefinitionDetail.cs" />
+    <Compile Include="DB\LogActivityDefinitionDetailType.cs" />
+    <Compile Include="DB\LogAgent.cs" />
+    <Compile Include="DB\LogAgentAccount.cs" />
+    <Compile Include="DB\LogAgentMetadata.cs" />
+    <Compile Include="DB\LogContext.cs" />
+    <Compile Include="DB\LogContextActivity.cs" />
+    <Compile Include="DB\LogContextActivityType.cs" />
+    <Compile Include="DB\LogExtension.cs" />
+    <Compile Include="DB\LogExtensionMetadata.cs" />
+    <Compile Include="DB\LogMetadata.cs" />
+    <Compile Include="DB\LogMetadataStudentInCourseInstance.cs" />
+    <Compile Include="DB\LogMetadataTeacher.cs" />
+    <Compile Include="DB\LogMetadataType.cs" />
+    <Compile Include="DB\LogResult.cs" />
+    <Compile Include="DB\LogScore.cs" />
+    <Compile Include="DB\LogStatement.cs" />
+    <Compile Include="DB\LogStatementLink.cs" />
+    <Compile Include="DB\LogVerb.cs" />
+    <Compile Include="DB\LogVerbLabel.cs" />
+    <Compile Include="DB\Students.cs" />
+    <Compile Include="ErrorLog.cs" />
+    <Compile Include="Kernel.cs" />
+    <Compile Include="LogParameters.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Types\AccessTypes.cs" />
+    <Compile Include="Types\NavigationTypes.cs" />
+    <Compile Include="Types\CustomXAPIDefinitionActivities.cs" />
+    <Compile Include="Types\ExerciseInteractionTypes.cs" />
+    <Compile Include="Types\CustomXAPIDefinitionVerbs.cs" />
+    <Compile Include="Types\CustomXAPIDefinitionExtensions.cs" />
+    <Compile Include="Types\EMCGTables.cs" />
+    <Compile Include="Types\ExerciseTypes.cs" />
+    <Compile Include="Types\LogActivityDefinitionDetailTypes.cs" />
+    <Compile Include="Types\LogActivityDefinitions.cs" />
+    <Compile Include="Types\LogContextActivityTypes.cs" />
+    <Compile Include="Types\MediaInteractionTypes.cs" />
+    <Compile Include="Types\Verbs.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

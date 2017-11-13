@@ -1,0 +1,8 @@
+﻿<Window x:Class="LMG.Infrastructure.Analytics.Daemon.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Label FontSize="24">Operation complete!</Label>
+    </Grid>
+</Window>

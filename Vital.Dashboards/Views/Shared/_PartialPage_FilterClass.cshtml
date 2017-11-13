@@ -1,0 +1,31 @@
+﻿<script>
+    onDocumentReady(function () {
+        //_classDataInitialize();
+        GlobalRebuildDataFunctions.push(_classDataInitialize);
+    });
+
+    function _classDataInitialize(queueCallback) {
+        var parameters = {};
+        parameters["courseinstanceid"] = GetSelectedCourseInstance();//"@(ViewBag.CourseInstanceId)";
+        GetData('@ViewBag.ApiUrl/v1/Data/Classes', _classDataLoaded, parameters, queueCallback);
+    }
+
+    function _classDataLoaded(error, data) {
+        var $select = $('#x_classSelect');
+        $select.find('option').remove();
+        data = JSON.parse(data);
+        for(var obj in data){
+            $select.append('<option value=' + data[obj].Id + '>' + data[obj].ClassType + ' - ' + data[obj].TeacherName + ' (' + data[obj].FromDate + ' - ' + data[obj].UntilDate + ')</option>');
+        }
+
+        $select.off("change", _classSelectionChanged);
+        $select.on("change", _classSelectionChanged);
+
+        console.log("_classDataLoaded");
+    }
+    function _classSelectionChanged() {
+        rebuildCharts();
+    }
+    
+    
+</script>

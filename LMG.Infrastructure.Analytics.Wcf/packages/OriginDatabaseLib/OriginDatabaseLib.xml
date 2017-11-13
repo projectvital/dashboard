@@ -1,0 +1,774 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OriginDatabaseLib</name>
+    </assembly>
+    <members>
+        <member name="T:OriginDatabaseLib.SqlConnection">
+            <summary>
+            SqlConnection connects to a database, local or remotely and can be fed SQLQuery* objects that will get executed.
+            Opening the connection has to be done with ODBC and can be done in two ways.
+            First you can supply the connection String yourself (OpenConnection(String)).
+            Second, you can use the SqlConnectionSettings object to setup/read an xml (See SqlConnectionSettings.cs)
+            
+            Once the connection is open, you can use ExecuteQuery to execute any (nested) query.
+            
+            Each connection can have ONE transaction (non-nested).
+            Once a transaction is started, you can use ExecuteQuery. Finish with TransactionCommit or TransactionRollback.
+            
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.#ctor">
+            <summary>
+            Empty Constructor. Just creates an object.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.OpenConnection(OriginDatabaseLib.SqlConnectionSettings)">
+            <summary>
+            Tries to open the connection with the provided connnection settings and return true on succes.
+            </summary>
+            <param name="ConnectionSettings">The object that contains the connection settings</param>
+            <returns>True on success. On failure, the SqlConnection object will be resetted back to a clean object.</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.OpenConnection(System.String)">
+            <summary>
+            Tries to open the connection with the provided connnection String and return true on succes.
+            </summary>
+            <param name="ConnectionString">The connection ODBC connection String</param>
+            <returns>True on success. On failure, the SqlConnection object will be resetted back to a clean object.</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.OpenSQLiteConnection(System.String)">
+            <summary>
+            Tries to open the connection with the provided connnection settings and return true on succes.
+            </summary>
+            <param name="ConnectionSettings">The object that contains the connection settings</param>
+            <returns>True on success. On failure, the SqlConnection object will be resetted back to a clean object.</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.OpenOracleConnection(System.String)">
+            <summary>
+            Tries to open the connection with the provided connnection settings and return true on succes.
+            A connection string with custom files (TNS? what?)
+            "Data Source = (DESCRIPTION = (ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=172.18.2.17)(PORT=1521)))(CONNECT_DATA=(SID=valinor)(SERVER=DEDICATED))); User Id = niels; Password = niels;"
+            </summary>
+            <param name="ConnectionSettings">The object that contains the connection settings</param>
+            <returns>True on success. On failure, the SqlConnection object will be resetted back to a clean object.</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.OpenConnection(OriginDatabaseLib.SqlConnectionSettings,System.Int32)">
+            <summary>
+            Tries to open the connection with the provided connnection settings and return true on succes.
+            </summary>
+            <param name="ConnectionSettings">The object that contains the connection settings</param>
+            <param name="TimeoutSeconds">Seconds before the connection times out (default is 1 seconds)</param>
+            <returns>True on success. On failure, the SqlConnection object will be resetted back to a clean object.</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.OpenConnection(System.String,System.Int32)">
+            <summary>
+            Tries to open the connection with the provided connnection String and return true on succes.
+            </summary>
+            <param name="ConnectionString">The connection ODBC connection String</param>
+            <param name="TimeoutSeconds">Seconds before the connection times out (default is 1 seconds)</param>
+            <returns>True on success. On failure, the SqlConnection object will be resetted back to a clean object.</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.CloseConnection">
+            <summary>
+            Closes the connection. If the connection was not open, nothing happens.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.ExecuteQuery(OriginDatabaseLib.SqlQuery)">
+            <summary>
+            Executes a query by accepting an SqlQuery object or any derived object.
+            Can throw Exceptions if anything goes wrong.
+            </summary>
+            <returns>
+            SqlResult object, containing the selected rows or the amount of update/insert/deleted rows.
+            </returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.ExecuteQuery(System.String)">
+            <summary>
+            Executes a query by accepting an SqlQuery object or any derived object.
+            Can throw Exceptions if anything goes wrong.
+            </summary>
+            <returns>
+            SqlResult object, containing the selected rows or the amount of update/insert/deleted rows.
+            </returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.ExcutePreparedStatement(OriginDatabaseLib.SqlPreparedStatement)">
+            <summary>
+            Executes a prepared statement. Can throw exceptions when something goes wrong.
+            A prepared statement will be executed as part of an transaction if one is started.
+            </summary>
+            <returns>
+            SqlResult containing the number of affected rows or the selected rows.
+            </returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.TransactionBegin">
+            <summary>
+            Begins a transaction. Can throw exceptions if there is allready a transaction started or if something goes wrong.
+            WARNING: if the database does not support transactions, this will be ignored. You will just be executing aueries.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.TransactionBegin(System.Data.IsolationLevel)">
+            <summary>
+            Begins a transaction. Can throw exceptions if there is allready a transaction started or if something goes wrong.
+            Isolation level of the transaction can be set.
+            WARNING: if the database does not support transactions, this will be ignored. You will just be executing queries.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.TransactionCommit">
+            <summary>
+            Commits the transaction. Data will be written to the database.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.TransactionRollback">
+            <summary>
+            Rolls back the transaction. Nothing happens.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.TransactionIsolationLevel">
+            <summary>
+            Get the isolation level of the transaction.
+            </summary>
+            <returns>
+            IsolationLevel that is currently set
+            </returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.TransactionActive">
+            <summary>
+            Checks if there is a transaction active.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.OpenODBCConnection(OriginDatabaseLib.SqlConnectionSettings)">
+            <summary>
+            This function does the dirty work. Opens the ODBC connection with the connection String.
+            </summary>
+            <returns>True on succes. Throws an SqlConnectionException on failure.</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnection.OpenODBCConnection(System.String)">
+            <summary>
+            This function does the dirty work. Opens the ODBC connection with the connection String.
+            </summary>
+            <returns>True on succes. Throws an SqlConnectionException on failure.</returns>
+        </member>
+        <member name="P:OriginDatabaseLib.SqlConnection.ConnectionOpen">
+            <summary>
+            Returns true if the connection is open.
+            Same as bool isOpen(); 
+            </summary>
+        </member>
+        <member name="P:OriginDatabaseLib.SqlConnection.CurrentDriver">
+            <summary>
+            Returns the current driver of the connection.
+            This can be usefull when with SqlValue to automaticly cast data depending on the driver.
+            </summary>
+        </member>
+        <member name="P:OriginDatabaseLib.SqlConnection.Timeout">
+            <summary>
+            Get or set the timeout of the connection
+            </summary>
+        </member>
+        <member name="P:OriginDatabaseLib.SqlConnection.LastSqlResult">
+            <summary>
+            Retrieves the result of the last executed query (can be null).
+            </summary>
+        </member>
+        <member name="P:OriginDatabaseLib.SqlConnection.oracleConnection">
+            <summary>
+            Returns the oracleconnection (if any).
+            Necessary for oracle specific handling of special fields such as BLOB, CLOB, ... via OracleCommand, OracleParameter, ...
+            </summary>
+        </member>
+        <member name="P:OriginDatabaseLib.SqlConnection.oracleTransaction">
+            <summary>
+            Returns the oracletransaction (if any).
+            Necessary for oracle specific handling of special fields such as BLOB, CLOB, ... via OracleCommand, OracleParameter, ...
+            </summary>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlConnectionSettings">
+            <summary>
+            This class simplifies creating connection String by reading the String from an XML file.
+            Further settings can be applied through the public members.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnectionSettings.setCharset(System.String)">
+            <summary>
+            Set the charset to a custom choice
+            </summary>
+            <param name="charset"></param>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnectionSettings.setCharset_ISO_8859_1">
+            <summary>
+            Set the charset to iso-8859-1
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnectionSettings.setCharset_UTF8">
+            <summary>
+            Set the charset to UTF8
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnectionSettings.setCharset_UTF16">
+            <summary>
+            Set the charset to UTF16
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnectionSettings.setCharset_ISO_Latin1">
+            <summary>
+            Set the charset to ISO-Latin1
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnectionSettings.isPortValid">
+            <summary>
+            Tests if the port is a valid interger in the correct range
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnectionSettings.isDriverValid">
+            <summary>
+            Test is the driver is valid (Stub function atm)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnectionSettings.isCharsetValid">
+            <summary>
+            Tests if the charset is valid (Stub function atm)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlConnectionSettings.ParseXML(System.String)">
+            <summary>
+            Parse an XML file containing the settings
+            </summary>
+            <param name="filename">Filename pointing to the XML file"</param>
+        </member>
+        <member name="M:OriginDatabaseLib.OdbcConnection.ExecuteSelectQueryAndReturnTable(OriginDatabaseLib.SqlQuery)">
+            <summary>
+            Executes a select query. Can throw exceptions if the connection is closed or another error occurs.
+            </summary>
+            <returns>
+            SqlResult containing the selected rows.
+            </returns>
+        </member>
+        <member name="M:OriginDatabaseLib.OdbcConnection.ExecuteNonSelectQuery(OriginDatabaseLib.SqlQuery)">
+            <summary>
+            Execute insert, update or delete query and return the number of records that changed.
+            </summary>
+            <returns>
+            SqlResult with the amount of affected rows.
+            </returns>
+        </member>
+        <member name="M:OriginDatabaseLib.OracleConnection.CloseConnection">
+            <summary>
+            Closes the connection. Pending commands are not finished
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.OracleConnection.ExecuteSelectQueryAndReturnTable(OriginDatabaseLib.SqlQuery)">
+            <summary>
+            Executes a select query. Can throw exceptions if the connection is closed or another error occurs.
+            </summary>
+            <returns>
+            SqlResult containing the selected rows.
+            </returns>
+        </member>
+        <member name="M:OriginDatabaseLib.OracleConnection.ExecuteNonSelectQuery(OriginDatabaseLib.SqlQuery)">
+            <summary>
+            Execute insert, update or delete query and return the number of records that changed.
+            </summary>
+            <returns>
+            SqlResult with the amount of affected rows.
+            </returns>
+        </member>
+        <member name="T:OriginDatabaseLib.SQLiteConnection">
+            <summary>
+            ODBC is possible with SQLite, however, this would bloat the system with an extra setup
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SQLiteConnection.#ctor">
+            <summary>
+            Creates new instance of SQLiteBase class.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SQLiteConnection.#ctor(System.String)">
+            <summary>
+            Creates new instance of SQLiteBase class and opens database with given name.
+            </summary>
+            <param name="baseName">Name (and path) to SQLite database file</param>
+        </member>
+        <member name="M:OriginDatabaseLib.SQLiteConnection.OpenDatabase(System.String)">
+            <summary>
+            Opens database. 
+            </summary>
+            <param name="baseName">Name of database file</param>
+        </member>
+        <member name="M:OriginDatabaseLib.SQLiteConnection.GetTables">
+            <summary>
+            Returns the list of tables in opened database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SQLiteConnection.SQLiteExecuteNonQuery(System.String)">
+            <summary>
+            Executes query that does not return anything (e.g. UPDATE, INSERT, DELETE).
+            </summary>
+            <param name="query"></param>
+        </member>
+        <member name="M:OriginDatabaseLib.SQLiteConnection.SQLiteExecuteQuery(System.String)">
+            <summary>
+            Executes query that does return something (e.g. SELECT).
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SQLiteConnection.CloseConnection">
+            <summary>
+            Closes opened database.
+            </summary>
+        </member>
+        <member name="T:OriginDatabaseLib.SQLiteConnection.SQLiteDataTypes">
+            <summary>
+            SQLite data types.
+            </summary>
+        </member>
+        <member name="F:OriginDatabaseLib.SQLiteConnection.SQLiteDataTypes.INT">
+            <summary>
+            Integer numbers.
+            </summary>
+        </member>
+        <member name="F:OriginDatabaseLib.SQLiteConnection.SQLiteDataTypes.FLOAT">
+            <summary>
+            Decimal numbers.
+            </summary>
+        </member>
+        <member name="F:OriginDatabaseLib.SQLiteConnection.SQLiteDataTypes.TEXT">
+            <summary>
+            All kinds of texts.
+            </summary>
+        </member>
+        <member name="F:OriginDatabaseLib.SQLiteConnection.SQLiteDataTypes.BLOB">
+            <summary>
+            Blob objects - binary large objects.
+            </summary>
+        </member>
+        <member name="F:OriginDatabaseLib.SQLiteConnection.SQLiteDataTypes.NULL">
+            <summary>
+            Nothing.
+            </summary>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlInformation">
+            <summary>
+            todo
+            </summary>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlODBCDriver">
+            <summary>
+            This class abstracts the custom connectrion String parameter for ODBC.
+            SQL Server for example expect UID as login, while MySQL expects USER.
+            Every ODBC connection String is different, so we have to make it uniformly
+            
+            Not all parameters for each driver are completely tested.
+            Mainly Postgres, MySQL and SQL Server have gone through testing.
+            In case of other String, please check http://www.connectionStrings.com
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:OriginDatabaseLib.SqlODBCDriver.FixDriverString(System.String)" -->
+        <member name="M:OriginDatabaseLib.SqlODBCDriver.getCustomParameter(OriginDatabaseLib.SqlODBCDriver.Driver,OriginDatabaseLib.SqlODBCDriver.ConnectionParameter)">
+            <summary>
+            Depending on the driver, this function will return the parameter for the ODBC String.
+            </summary>
+            <returns>Return the parameter String</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:OriginDatabaseLib.SqlODBCDriver.DriverStringToEnum(System.String)" -->
+        <member name="M:OriginDatabaseLib.SqlODBCDriver.getLimitStringByDriver(OriginDatabaseLib.SqlODBCDriver.Driver,OriginDatabaseLib.SqlQuerySelect)">
+            <summary>
+            Adds the LIMIT clause to a query. Because this is VERY database dependent, it is impossible to do it inside the SqlQuerySelect class.
+            When no LIMIT is set, the query String is returned without a LIMIT clause.
+            </summary>
+            <returns>A the auery String with the LIMIT clause</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlODBCDriver.getDriverList">
+            <summary>
+            Returns a String array containing all the supported driver Strings.
+            </summary>
+            <returns>Array of driver Strings</returns>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlODBCDriver.Driver">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlODBCDriver.ConnectionParameter">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:OriginDatabaseLib.SqlPreparedStatement" -->
+        <member name="T:Fimacs.DB.Database">
+            <summary>
+            Summary description for Database.
+            </summary>
+        </member>
+        <member name="M:Fimacs.DB.Database.ExecuteQuery(System.String)">
+            <summary>
+            For SELECTs, like "SELECT * FROM TABLENAME"
+            </summary>
+        </member>
+        <member name="M:Fimacs.DB.Database.ExecuteScalar(System.String)">
+            <summary>
+            For SELECTs, like "SELECT COUNT(*) FROM TABLENAME"
+            </summary>
+        </member>
+        <member name="M:Fimacs.DB.Database.ExecuteNonQuery(System.String)">
+            <summary>
+            For UPDATEs, INSERTs and DELETEs... (Executes commands such as INSERT, DELETE, UPDATE.)
+            </summary>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataBlockType">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataBlock">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataBlockCombination">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataBlockDoubleString">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataBlockQuery">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataBlockQueryString">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataBlockSingleString">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataBlockStringQuery">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlValue">
+            <summary>
+            SqlValue is a helper class that converts C# data types to SQL equivalent types.
+            
+            The Convert function transform almost all types to a String that can be used in SqlQueries. The Convert function can be used with or without the SqlODBCDriver specified. (Some datatypes have different SQL Strings)
+            
+            It is important to set the default driver at least once before using the Convert function (if no driver parameter is supplied to the function)
+            
+            </summary>
+        </member>
+        <member name="F:OriginDatabaseLib.SqlValue.CurrentDriver">
+            <summary>
+            This parameter is staticcally defined and can be used by to reduce the code size.
+            It is however not safe to switch at runtime between multiple driver.
+            
+            In the case that more then 1 database is used,
+            you should opt to use the functions that convert with an extra driver parameter.
+            </summary>
+        </member>
+        <member name="F:OriginDatabaseLib.SqlValue.CurrentDriverClass">
+            <summary>
+            This parameter is statically defined and follows the CurrentDriver member.
+            Instead of an enum, it contains an instance of the specific driver class.
+            </summary>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlValue.setCurrentDriver(OriginDatabaseLib.SqlODBCDriver.Driver)">
+            <summary>
+            This function allows you to set the default driver for SqlValue functions.
+            Depending on the different driver, some parameters may be converted differently.
+            
+            Because only 1 driver can be default at any one time,
+            it is adviced to only use this functionality in an environment where only 1 driver is used.
+            In case of multiple drivers, you should opt to use the Convert functions that require a Driver parameter.
+            </summary>
+            <param name="driver"></param>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlValue.getCurrentDriver">
+            <summary>
+            This function allows you to retrieve the default driver for SqlValue functions.
+            Depending on the different driver, some parameters may be converted differently.
+            
+            Because only 1 driver can be default at any one time,
+            it is adviced to only use this functionality in an environment where only 1 driver is used.
+            In case of multiple drivers, you should opt to use the Convert functions that require a Driver parameter.
+            </summary>
+            <returns>The current driver stored in the SqlValue.</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlValue.getCurrentDriverClass">
+            <summary>
+            See setCurrentDriver and getCurrentDriver.
+            </summary>
+            <returns>The current driver class instance stored in the SqlValue.</returns>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlValue.ConvertByteArrayToSqlString(System.Byte[],OriginDatabaseLib.SqlODBCDriver.Driver)">
+            <summary>
+            Converts a byte array (containing any form of data) to a String that can be used for insertion to the database.
+            The returned String is Driver dependand (Sometimes Hex, sometimes base64).
+            </summary>
+            <param name="data"></param>
+            <param name="driver"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OriginDatabaseLib.DB_SQLServer_Base">
+             <summary>
+            
+             </summary>
+             <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.DB_Driver_Example">
+             <summary>
+            
+             </summary>
+             <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.DB_SQLServer">
+             <summary>
+            
+             </summary>
+             <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.DB_SQLServer2005">
+             <summary>
+            
+             </summary>
+             <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlCommonQueryFactory">
+            <summary>
+            todo
+            </summary>
+            <seealso cref="T:OriginDatabaseLib.SqlQuery">SqlQuery</seealso>
+            <seealso cref="T:OriginDatabaseLib.SqlQueryGenerator">SqlQueryGenerator</seealso>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryType">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.NestedQuery">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQuery">
+            <summary>
+            
+            <h2>QUERY DEFINING</h2>
+            Defining a query is SQL language independant. A query can be defined and then used with any SQL database.
+            You begin a new query by first defining an SqlQuery:
+            
+            <code>SqlQuerySelect
+            SqlQueryUpdate
+            SqlQueryDelete
+            SqlQueryInsert
+            SqlQueryCustom</code>
+            
+            Next, use the functions to build your query:
+            <code>SqlQuerySelect select1 = new SqlQuerySelect();
+            select1.Select("*");
+            select1.From("table");
+            select1.Where("column = 1");</code>
+            
+            You can also combine the 3 lines into one line (because each function returns the query)
+            <code>select1.Select("*").From("table").Where("column = 1");</code>
+            
+            Next use the connection to execute the query:
+            <code>SqlQueryResult result1 = connection.ExecuteQuery(select1);</code>
+            
+            Finally, loop through the result (See SqlQueryResult)<br/>
+            
+            <h2>QUERY NESTING</h2>
+            Nested queries allows the programmer to combine multiple SqlQuery objects into 1 large query.<br/>
+            
+            Instead of building 1 giant query, it can be split up in smaller parts. 
+            There is no maximum depth or complexity of the nesting,
+            looping however is forbidden.<br/>
+            
+            <h3>Implementation info:</h3>
+            <ul>
+            <li>When building the nested query, the algoritm will check if a query has been altered, if not, the query will remain unchanged.</li>
+            <li>If something changed however, the query will be rebuild (and recursively the children in depth-first manner)</li>
+            <li>Then if one of those children include a parent, a loop will occur and nothing can be resolved.</li>
+            </ul>
+            
+            </summary>
+            <example>
+            <h3>A nested query example</h3>
+            
+            <code>SqlQuerySelect selectParent = new SqlQuerySelect();
+            SqlQuerySelect selectChild = new SqlQuerySelect();
+            
+            selectChild.Select("*").From("table");
+            selectParent.Select("*").From(selectChild);</code>
+            
+            </example>
+            <seealso cref="T:OriginDatabaseLib.SqlQuerySelect">SqlQuerySelect</seealso>
+            <seealso cref="T:OriginDatabaseLib.SqlQueryUpdate">SqlQueryUpdate</seealso>
+            <seealso cref="T:OriginDatabaseLib.SqlQueryInsert">SqlQueryInsert</seealso>
+            <seealso cref="T:OriginDatabaseLib.SqlQueryDelete">SqlQueryDelete</seealso>
+            <seealso cref="T:OriginDatabaseLib.SqlQueryCustom">SqlQueryCustom</seealso>
+            <seealso cref="T:OriginDatabaseLib.SqlResult">SqlResult</seealso>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryCustom">
+            <summary>
+            todo
+            </summary>
+            <seealso cref="T:OriginDatabaseLib.SqlQuery">SqlQuery</seealso>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlQueryCustom.GenerateQuery(OriginDatabaseLib.SqlODBCDriver.Driver)">
+            <summary>
+            Does nothing.
+            </summary>
+            <param name="driver"></param>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryDeleteInit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryDelete">
+            <summary>
+            todo
+            </summary>
+            <seealso cref="T:OriginDatabaseLib.SqlQuery">SqlQuery</seealso>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryGenerator">
+            <summary>
+            todo
+            </summary>
+            <seealso cref="T:OriginDatabaseLib.SqlQuery">SqlQuery</seealso>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlQueryGenerator.createReindexDatabaseQuery(OriginDatabaseLib.SqlConnection,System.String)">
+            <summary>
+            PostgreSQL only!
+            </summary>
+            <param name="connection"></param>
+            <param name="tablename">Name of database</param>
+            <returns></returns>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryInsertInit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryInsert">
+            <summary>
+            todo    
+            </summary>
+            <seealso cref="T:OriginDatabaseLib.SqlQuery">SqlQuery</seealso>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryNull">
+            <summary>
+            This class is a special version of the SqlQueryCustom class.
+            It simply contains no query. It does nothing.
+            This is used when a certain databases is known to lack a feature.
+            ie. MySQL has no reindex command, while PostgreSQL does.
+            
+            This is added for extra compatibility
+            </summary>
+            <seealso cref="T:OriginDatabaseLib.SqlQuery">SqlQuery</seealso>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlQueryNull.GenerateQuery(OriginDatabaseLib.SqlODBCDriver.Driver)">
+            <summary>
+            Does nothing.
+            </summary>
+            <param name="driver"></param>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQuerySelectInit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQuerySelect">
+            <summary>
+            SQL Select query class
+            Use the functions to setup and generate an SELECT query.
+            Each most function return the object so you can have something like:
+            
+            SqlQuerySelect query = new SqlQuerySelect();
+            query.Select("name").From("users").Where("name = 'John Doe'");
+            
+            \todo { alle testen uit de functions halen. dat is zinloos }
+            
+            </summary>
+            <seealso cref="T:OriginDatabaseLib.SqlQuery">SqlQuery</seealso>
+        </member>
+        <member name="M:OriginDatabaseLib.SqlQuerySelect.Limit(System.Int32,System.Int32)">
+            <summary>
+            Limits the amount of output rows.
+            Begin is the position of the first row ( array like indexing, starting from 0)
+            Size is the maximum amount of rows requested
+            </summary>
+            <example>
+            
+            Limit (0, 2) returns the following rows : [0,1]
+            Limit (1, 2) returns the following rows : [1,2]
+            Limit (2, 2) returns the following rows : [2,3]
+            
+            </example>
+            <param name="begin"></param>
+            <param name="size"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryUpdateInit">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlQueryUpdate">
+            <summary>
+            SqlQueryUpdate is a derived class from ref SqlQuery.
+            It generate the SQL UPDATE QUERY
+            
+            UPDATE tablename SET column1 = 'value1', column2 = 'value2' WHERE column3 = 'value3'
+            
+            </summary>
+            <seealso cref="T:OriginDatabaseLib.SqlQuery">SqlQuery</seealso>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataType">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <member name="T:OriginDatabaseLib.SqlDataType.DataType">
+            <summary>
+            
+            </summary>
+            <exclude/>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:OriginDatabaseLib.SqlResult" -->
+        <member name="T:OriginDatabaseLib.SqlResultPosition">
+            <summary>
+            This helper class simplifies the iteration of ref SqlResult.
+            By using this class, the iterator doesn't resolve the column name each iteration.
+            </summary>
+            <seealso cref="T:OriginDatabaseLib.SqlResult">SqlResult</seealso>
+        </member>
+    </members>
+</doc>

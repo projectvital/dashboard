@@ -1,0 +1,380 @@
+﻿@{
+    ViewBag.Title = "Login";
+    ViewBag.RequireD3 = true;
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<style>
+    body {
+        /*padding-top: 40px;*/
+        /*padding-bottom: 40px;*/
+        background-color: white;
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .form-signin .form-signin-heading,
+    .form-signin .checkbox {
+        margin-bottom: 10px;
+    }
+
+    .form-signin .checkbox {
+        font-weight: normal;
+    }
+
+    .form-signin .form-control {
+        position: relative;
+        font-size: 16px;
+        height: auto;
+        /*padding: 10px;*/
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+
+    .form-signin input[type="email"] {
+        margin-bottom: 4px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    .error-panel {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 5px;
+        border-radius: 5px;
+        border: 2px solid red;
+        background-color: pink;
+        color: red;
+        font-weight: bold;
+    }
+
+    .mainbox {
+        /*padding-top: 0;*/
+    }
+     #body-container {
+            background-color: white;
+            -moz-border-radius: 15px;
+            -webkit-border-radius: 15px;
+            border-radius: 15px;
+        }
+
+     
+
+         
+    #col-left {
+        width: 100%;
+    }
+
+    #col-right {
+        width: 100%;
+        min-height: 900px;
+
+        background: url('/Content/Images/achtergrondbeeld_web_overlaycolor.jpg');
+        /*background-attachment: fixed;*/
+        background-repeat: no-repeat;
+        background-position: 0 00px;
+        background-size: auto 100%;
+        padding-left: 20px;
+        padding-top: 20px;
+
+        /*overflow-y: auto;*/
+    }
+        
+    #col-right-text {
+        margin-top: 0;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+    #col-right-footer {
+        margin-top: 20px;
+    }
+
+    @@media only screen and (min-width : 768px) {
+        /*body{
+             overflow: hidden; 
+        }
+        .is-table-row {
+            display: table;
+
+        }
+
+            .is-table-row [class*="col-"] {
+                float: none;
+                display: table-cell;
+                vertical-align: top;
+                margin-bottom: -99999px;
+                padding-bottom: 99999px;
+            }*/
+
+        #col-left {
+            width: 400px;
+            position: absolute;
+            height: 100%;
+        }
+
+        #col-right {
+            width: auto;
+            left: 400px;
+            top: 0;
+            right: 0;
+            position: absolute;
+            min-height: 100%;
+            padding-top: 20px;
+            padding-right: 25px;
+        }
+
+        #col-right-content {
+            padding-left: 60px;
+            padding-bottom: 80px;
+        }
+
+        #col-right-text {
+            padding-top: 150px;
+            display: block;
+        }
+
+        #col-right-footer {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 10px;
+            margin-top: 0;
+        }
+    }
+
+
+</style>
+
+<div class="mainbox is-table-row">
+@*    <div class="region-top">
+        <div class="" style="padding-top: 10px;">*@
+            <div id="col-left" @*class="col-md-3"*@ style="padding: 0; background-color: white; padding-top: 50px;">
+               @* <div class="col-md-12 login">*@
+                    <div style="text-align: center; border: 1px solid gray; border-radius: 75px; width: 150px; height: 150px; margin: 0 auto;">
+                        @if (Request.Url.Host.ToLower().Contains(".uclan."))
+                        {
+                            <img src="/Content/Images/logo-uclan.gif" alt="" style="width: 150px; margin-top: 17px;" />
+                        }
+                        else if (Request.Url.Host.ToLower().Contains(".uva."))
+                        {
+                            <img src="/Content/Images/logo-uva-compact.png" alt="" style="width: 150px; margin-top: 59px;" />
+                        }
+                        else
+                        {
+                            <img src="/Content/Images/logo-uhasselt.png" alt="" style="height: 75px; margin-top: 35px;" />
+                            @*<img src="/Content/Images/logo-uhasselt-compact.png" alt="" style="height: 60px;" />*@
+                        }
+                    </div>
+
+                    
+                    <div style="margin: 0 auto; width: 90%; margin-top: 20px;"> @* class="form-signin" role="form" method="post">*@
+                        Username
+                        <input type="text" class="form-control" placeholder="User Name" autofocus name="x_username" style="max-width: 100%;">
+                        Password
+                        <input type="password" class="form-control" placeholder="Password" name="x_password" style="max-width: 100%;">
+
+                        @*                  @if (!string.IsNullOrWhiteSpace(ViewBag.LoginError))
+                        { 
+                            <div class="error-panel">
+                                @Html.Raw(ViewBag.LoginError)
+                            </div>
+                        }*@
+                        <div style="text-align: center;">
+                            <a href="#" class="btn" onclick="attemptSignIn();" style="background-color: #e73a59; color: white; padding-left: 50px; padding-right: 50px; margin-bottom: 10px;" @*type="submit"*@>Login</a>
+                            <br />
+                            <span style="color: gray; font-size: 0.6em; margin-top: 10px;">
+                                Problems logging in? 
+                                @if (Request.Url.Host.ToLower().Contains(".uclan."))
+                                {
+                                    <a href="mailto:mthomas4@uclan.ac.uk?subject=VITAL Dashboards - Login problem" >Click here</a>
+                                }
+                                else if (Request.Url.Host.ToLower().Contains(".uva."))
+                                {
+                                    <a href="mailto:a.j.p.heck@uva.nl?subject=VITAL Dashboards - Login problem" >Click here</a>
+                                }
+                                else
+                                {
+                                    <a href="mailto:anouk.gelan@uhasselt.be?subject=VITAL Dashboards - Login problem" >Click here</a>
+                                }
+                            </span>
+                        </div>
+                        @*<button class="btn button-password" type="button" data-toggle="modal" data-target="#myModalPasswordDialog" >@(LMG.Student.Presentation.Resources.Shared.action_forgot_password)</button>    *@
+                    </div>
+                @*</div>*@
+            </div>
+
+            <div id="col-right" @*class="col-md-9"*@ style="background-color: #540d1b; color: white;">
+                
+                <div id="col-right-content">
+                    <div style="float:left;"><img src="/Content/Images/logo-vital-dashboards.svg" alt="Vital Dashboards" style="height: 60px;" /></div>
+                    <div style="float: right;">
+                        <div class="navbar-icons" style="color: white; text-align: right; margin-top: 20px;">
+                            <a href="http://www.project-vital.eu/" target="_blank" title="Project website">
+                                <img src="@Url.Content("~/Content/Images/icon-projectsite.svg")" alt="Project website" />
+                            </a>
+                            <a href="mailto:anouk.gelan@uhasselt.be?subject=VITAL Dashboards" title="Contact">
+                                <img src="@Url.Content("~/Content/Images/icon-contact.svg")" alt="Contact" />
+                            </a>
+                            @if (Request.Url.Host.ToLower().Contains(".uclan."))
+                            {
+                                ViewBag.Guidelines = "Guidelines-UCLan.pdf";
+                            }
+                            else if (Request.Url.Host.ToLower().Contains(".uva."))
+                            {
+                                ViewBag.Guidelines = "Guidelines-UvA.pdf";
+                            }
+                            else
+                            {
+                                ViewBag.Guidelines = "Guidelines-UHasselt.pdf";
+                            }
+                            <a href="~/Content/Pdf/@ViewBag.Guidelines" title="Guidelines" target="_blank">
+                                <img src="@Url.Content("~/Content/Images/icon-guidelines.svg")" alt="Guidelines" />
+                            </a>
+                        </div>
+                    </div>
+                
+                    <div id="col-right-text" style="">
+                        <h2>WELCOME!</h2>
+                        @if (Request.Url.Host.ToLower().Contains(".uclan."))
+                        {
+                            <text>
+                            <p>Dear student,</p>
+                            <br />
+                            <p>
+                                The European VITAL project coordinated by Hasselt University in which UCLan participates has led to the implementation of Learning Analytics in the courses “EB3006"/"EB4710”. <strong>Learning Analytics</strong> is a new research domain that consists in collecting, measuring, analysing and reporting data about online learning in order to better understand and optimise learning and the environment in which it occurs.
+                            </p>
+                                Your learning activities in the online learning environment for the courses of “EB3006"/"EB4710”, and those of your fellow students, have been analysed using statistical and process mining techniques and learning dashboards have been developed. 
+                            <p>
+                                <strong>Log in and use the username and personal password you received from your instructor</strong> to get an overview of your learning progress and behaviour. Only you and your instructor can see your learning data, not your fellow students. Your password is strictly personal. 
+                                When you have logged in, you see <strong>your own results</strong>. Apart from those, you can only see the group averages, not anyone other’s individual results. 
+                            </p>
+                            <p>
+                                Please fill in our evaluation <a href="https://docs.google.com/forms/d/e/1FAIpQLSeT9pXT0BAM1yZ8Oad8lxpye_zzseoYr6n6vOBX4UQkeWC4SA/viewform?usp=sf_link" target="_blank">questionnaire</a>.
+                            </p>
+                            </text>
+                        }
+                        else if (Request.Url.Host.ToLower().Contains(".uva."))
+                        {
+                            <text>
+                            <p> 
+                                Beste student,
+                            </p> 
+                            <br />
+                            <p>
+                                In het kader van het Europese VITAL project waar UvA aan deelneemt is “Learning Analytics” geïmplementeerd in het opleidingsonderdeel “ Van Molecuul tot Cel". <strong>Learning Analytics</strong> is een nieuw onderzoeksdomein dat bestaat uit het verzamelen, meten, analyseren en rapporteren van data over online leren. De bedoeling is het leren beter te begrijpen en het leren en de leeromgeving te optimaliseren.
+                                Je activiteiten in de online leermodule van het vak “Van Molecuul tot Cel ", en de activiteiten van je medestudenten, zijn geanalyseerd met behulp van  statistische en process mining technieken en <strong>leerdashboards zijn ontwikkeld</strong>.
+                            </p>
+                            <p>
+                                <strong>Log in met je persoonlijke login en wachtwoord dat je per e-mail onlangs ontvangen hebt om een overzicht te krijgen van je leervoortgang en -gedrag</strong>. Alleen jij en je docent kunnen jouw leerdata zien, niet je medestudenten. Je wachtwoord is dus persoonlijk. 
+                                Wanneer je ingelogd bent, zie je je eigen statistieken. Hiernaast kan je ook de gemiddelden van je groep zien (niet de gegevens van individuele studenten). 
+                            </p>
+                            </text>
+                        }
+                        else
+                        {
+                            <text>
+                            <p>
+                            Beste student,
+                            </p>
+                            <br />
+                            <p>
+                                In het kader van het Europese VITAL project dat UHasselt-CTL coördineert werd “Learning Analytics” geïmplementeerd in het opleidingsonderdeel “Economisch & Zakelijk Frans 1”/”Français des Affaires 1 of 2". <strong>Learning Analytics</strong> is een nieuw onderzoeksdomein dat bestaat uit het verzamelen, meten, analyseren en rapporteren van data over online leren. De bedoeling is het leren beter te begrijpen en het leren en de leeromgeving te optimaliseren.
+                                Je activiteiten in de online leermodule van het opleidingsonderdeel “Economisch & Zakelijk Frans 1”/”Français des Affaires 1 of 2", en de activiteiten van je medestudenten, werden geanalyseerd o.b.v. statistische en process mining technieken en <strong>leerdashboards werden ontwikkeld</strong>. 
+                            </p>
+                            <p>
+                                <strong>Met je persoonlijke login en paswoord van de online leermodules (Plurilingua)</strong> kan  je inloggen en krijg je toegang tot je eigen gegevens die een <strong>overzicht bieden van je leervoortgang en -gedrag</strong>. Alleen jij en je docent kunnen jouw eigen leerdata zien, niet je medestudenten. Je paswoord is dus persoonlijk. 
+                                Wanneer je ingelogd bent, zie je je eigen statistieken. Hiernaast kan je ook de gemiddelden van je groep zien (niet de gegevens van individuele studenten). 
+                            </p>
+                            </text>
+                        }
+
+                        <a href="#" class="btn" onclick="$('#x_readmore').toggle();" style="background-color: transparent; border: 1px solid white; color: white; padding-left: 50px; padding-right: 50px;">Read more</a>
+                    </div>
+
+                    <div style="display: none; margin-top: 30px;" id="x_readmore">
+                        @if (Request.Url.Host.ToLower().Contains(".uclan."))
+                        {
+                            <text>
+                            @*[More]*@
+                            <p>
+                                <strong>Select "All students"</strong> in the scroll menu at the top of the screen to see the averages of all students in the course or of your own group.
+                            </p>
+                            <p>
+                                The graphs you see display information about your engagement in the online learning environment and your progress relative to the course schedule. Click on the i-buttons next to each graph for important information.
+                            </p>
+                            <br />
+                            <p> 
+                                As indicated in the course information in Blackboard, your data are used only for the purposes of supporting students in their online learning and optimising course design. They will NOT play a role in the final grading. These learning data only reflect your online learning behaviour and do not provide a complete visualisation of your learning process. The data are always interpreted in the context of the entire course. More information about the confidential and ethical treatment of personal data can be found in this document (cf. Action plan legal & ethical aspects of LA).
+                            </p>
+                            </text>
+                        }
+                        else if (Request.Url.Host.ToLower().Contains(".uva."))
+                        {
+                            <text>
+                            @*[More]*@
+                            <p>
+                                Selecteer <strong>"All students"</strong> in het rolmenu bovenaan het scherm om de gemiddelden van alle studenten in je groep te zien.
+                            </p>
+                            <p> 
+                                De grafieken tonen je activiteit binnen de online leeromgeving en jouw voortgang ten opzichte van de planning.
+                            </p>
+                            <br />
+                            <p>
+                                Zoals vermeld in de vakinformatie, worden je data enkel gebruikt met het doel studenten te ondersteunen in hun online leren en het cursusontwerp te optimaliseren. Deze data spelen GEEN rol in welke beoordeling dan ook. De leerdata weerspiegelen alleen je online leergedrag in de context van het vak en bieden geen volledig beeld van je leerproces en –inspanningen. 
+                                Meer informatie over de vertrouwelijke en ethische behandeling stond in Informed consent. 
+                            </p>
+
+                            </text>
+                        }
+                        else
+                        {
+                            @*[More]*@
+                            <p>
+                                Selecteer <strong>"All students"</strong> in het rolmenu bovenaan het scherm om de gemiddelden van alle studenten in je groep te zien.
+                            </p>
+                            <p>
+                                De grafieken die je ziet tonen je inzet binnen de online leeromgeving en je voortgang ten opzichte van de studieleidraad. Klik op de i-knop naast elke grafiek voor uitleg.
+                            </p>
+                            <br />
+                            <p>
+                                Zoals vermeld in de informatie over dit opleidingsonderdeel op Blackboard, worden je data enkel gebruikt met het doel studenten te ondersteunen in hun online leren en het cursusdesign te optimaliseren. Deze data spelen GEEN rol in de examenbeoordeling. De leerdata weerspiegelen alleen je online leergedrag en bieden geen volledig beeld van je leerproces en -inspanningen. Ze worden dan ook steeds geïnterpreteerd binnen de volledige cursuscontext. 
+                                Meer informatie over de vertrouwelijke en ethische behandeling van de gegevens kan je vinden <a target="_blank" href="~/Content/Pdf/VITAL_Actionplan_Legal_ethical_aspects_collection_learning_data25042016_V2.pdf">in dit document</a>.
+                            </p>
+                        }
+                    
+                    </div>
+                </div>
+               
+                
+                <div id="col-right-footer" style="text-align: center; ">
+                    @Html.Partial("~/Views/Shared/_PartialPage_Footer_Partners.cshtml")
+                </div>
+            </div>
+
+                
+
+   @*     </div>
+    </div>*@
+</div>
+
+<script>
+    function attemptSignIn() {
+        var parameters = {};
+        parameters["username"] = document.getElementsByName('x_username')[0].value;
+        parameters["password"] = document.getElementsByName('x_password')[0].value;
+        GetData('@ViewBag.ApiUrl/v1/Account/Login', _loginAttemptCompleted, parameters)
+    };
+   
+</script>
