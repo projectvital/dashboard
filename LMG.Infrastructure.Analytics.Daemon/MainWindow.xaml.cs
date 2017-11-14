@@ -43,6 +43,8 @@ namespace LMG.Infrastructure.Analytics.Daemon
                     ActionHelper.Main_Pull();
                 else if (IsDaemonMode("push"))
                     ActionHelper.Main_Push();
+                else if (IsDaemonMode("import_json"))
+                    XApiImportHelper.ImportJsonStatementsInFolder("Export");
                 else if (IsDaemonMode("calculate_performancegroup"))
                     DataPreparationHelper.CalculateStudentPerformanceGroup();
                 else if (IsDaemonMode("import_metadata"))
