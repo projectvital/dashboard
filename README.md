@@ -40,9 +40,9 @@ Notes
 =====
 Recommended software requirements
 ---------------------------------
-Visual Studio 2012
-SQL Server 2014
-XAPI version 1.0.2+
+- Visual Studio 2012
+- SQL Server 2014
+- XAPI version 1.0.2+
 
 Disclaimer
 ----------
