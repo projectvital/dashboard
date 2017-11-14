@@ -1,8 +1,8 @@
 # dashboard
 
-[![VITAL Logo](https://imgur.com/foVR4Dr.png)](http://www.project-vital.eu)
+[![VITAL Logo](https://github.com/projectvital/dashboard/raw/master/readme-logo-vital.png)](http://www.project-vital.eu)
 
-![Erasmus+ Logo](https://imgur.com/h6LO6ni.jpg)
+![Erasmus+ Logo](https://github.com/projectvital/dashboard/raw/master/readme-logo-erasmus%2B.jpg)
 
 
 This project has been funded with support from the European Commission (Project number: 2015-
